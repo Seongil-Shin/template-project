@@ -5,6 +5,7 @@ import SliderContents from "./Slider";
 import bannerImg from "../img/main.jpg";
 import bannerImg2 from "../img/t2.jpg";
 import bannerImg3 from "../img/1.jpg";
+import bannerImg4 from "../img/ceo.jpg";
 
 const Bannerwrapper = styled.div`
   height: 90vh;
@@ -25,6 +26,10 @@ const Bannerwrapper = styled.div`
   & .react-parallax-content button {
     margin-top: 120px;
   }
+  & .react-parallax-bgimage {
+    height: 100% !important;
+  }
+  
 `;
 
 var settings = {
@@ -51,25 +56,26 @@ function Banner() {
             bg={bannerImg}
             title="The EndGame"
             subTitle="Infinity saga Phase 3"
-            btn="보러가기"
-            colors="#FCFDFF,#7F7FD5,#DE99AB,#ffffff" //title,subtitle,button-background,button
+            btn="보러가기,불투명"
+            colors="#FCFDFF,#B8C7E2,#DE99AB,#ffffff" //title,subtitle,button-background,button
           />
           <SliderContents
             type="2"
-            bg={bannerImg2}
+            img={bannerImg2}
             title="Iz* one me"
             subTitle="하나가 되는 순간 모두가 주목해"
-            btn="연장하기"
+            btn="연장하기,투명"
             colors="#1A4188,#DE99AB,#86A8E7,#ffffff"
             float="right"
             align="left"
           />
           <SliderContents
             type="3"
+            img={bannerImg4}
             bg={bannerImg3}
             title="GEVO"
             subTitle="바이든-친환경주 대장"
-            btn="매수"
+            btn="매수,투명"
             colors="#FCFDFF,#7F7FD5,#DE99AB,#ffffff"
             float="left"
             align="left"

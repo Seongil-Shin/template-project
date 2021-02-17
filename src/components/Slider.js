@@ -33,16 +33,15 @@ const Subtitle = styled.h3`
 `;
 
 const Button = styled.button`
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   color: ${(props) => props.color};
   font-size: ${(props) => (props.fontSize === "big" ? "25px" : "20px")};
-  background-color: ${(props) => props.bg};
+  background-color: ${(props) => props.opacity === "불투명" ? props.bg : "rgba( 255, 255, 255, 0 )"};
   width: 150px;
   height: 60px;
   margin: ${(props) => (props.align === "center" ? "0 auto" : "0")};
   border: 0;
-  border-radius: 15px;
+  border-radius: 25px;
+  border: 2px solid ${(props) => props.bg};
 `;
 
 const Img = styled.img`
@@ -74,7 +73,7 @@ function SliderWrapper(props) {
         bg: "",
         fontSize: "middle",
         align: props.align,
-        img: props.bg,
+        img: props.img,
         float: props.float
     };
     
@@ -83,7 +82,7 @@ function SliderWrapper(props) {
         bg: props.bg,
         fontSize: "middle",
         align: props.align,
-        img: props.bg,
+        img: props.img,
         float: props.float
     };
 
@@ -116,8 +115,9 @@ function SliderWrapper(props) {
                 align={types.align}
                 bg={props.colors.split(",")[2]}
                 color={props.colors.split(",")[3]}
+                opacity={props.btn.split(',')[1]}
             >
-                {props.btn}
+                {props.btn.split(',')[0]}
             </Button>
             </TextWrapper>
             <Img src={types.img} />
