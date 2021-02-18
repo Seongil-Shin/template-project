@@ -28,6 +28,7 @@ const Bannerwrapper = styled.div`
   }
   & .react-parallax-bgimage {
     height: 100% !important;
+    width: 100% !important;
   }
   
 `;
@@ -41,7 +42,11 @@ var settings = {
   autoplay: true,
   autoplaySpeed: 10000, //(ms)
   pauseOnHover: true,
-  arrows: false
+  arrows: false,
+  dots: true,
+  //prevArrow : "<button type='button' class='slick-prev'>Previous</button>",		// 이렇게 디자인 html 임의 설정 가능
+  //nextArrow : "<button type='button' class='slick-next'>Next</button>",	
+  //dotsClass : "slick-dots",//css class 지정도 지정 가능
 };
 
 function Banner() {
@@ -74,7 +79,7 @@ function Banner() {
             img={bannerImg4}
             bg={bannerImg3}
             title="GEVO"
-            subTitle="바이든-친환경주 대장"
+            subTitle="친환경주 대장"
             btn="매수,투명"
             colors="#FCFDFF,#7F7FD5,#DE99AB,#ffffff"
             float="left"
