@@ -10,27 +10,6 @@ import bannerImg4 from "../img/ceo.jpg";
 const Bannerwrapper = styled.div`
   height: 90vh;
   width: 100%;
-
-  & .react-parallax {
-    width: 100%;
-    height: 100%;
-    background: transparent
-      linear-gradient(180deg, #7f7fd5 0%, #86a8e7 49%, #91eae4 100%) 0% 0%
-      no-repeat padding-box;
-  }
-  & .react-parallax-content {
-    height: 90vh;
-
-    padding: 30px;
-  }
-  & .react-parallax-content button {
-    margin-top: 120px;
-  }
-  & .react-parallax-bgimage {
-    height: 100% !important;
-    width: 100% !important;
-  }
-  
 `;
 
 var settings = {
@@ -49,7 +28,7 @@ var settings = {
   //dotsClass : "slick-dots",//css class 지정도 지정 가능
 };
 
-function Banner() {
+function Banner(props) {
   useEffect(() => {}, []);
 
   return (
@@ -62,15 +41,15 @@ function Banner() {
             title="The EndGame"
             subTitle="Infinity saga Phase 3"
             btn="보러가기,불투명"
-            colors="#FCFDFF,#B8C7E2,#DE99AB,#ffffff" //title,subtitle,button-background,button
+            colors="#FCFDFF,#B8C7E2,#DE99AB,#FFFFFF" //title,subtitle,button-background,button
           />
           <SliderContents
             type="2"
-            img={bannerImg2}
+            img={bannerImg2}            
             title="Iz* one me"
             subTitle="하나가 되는 순간 모두가 주목해"
             btn="연장하기,투명"
-            colors="#1A4188,#DE99AB,#86A8E7,#ffffff"
+            colors="#1A4188,#DE99AB,#86A8E7,#FFFFFF"
             float="right"
             align="left"
           />
@@ -81,7 +60,7 @@ function Banner() {
             title="GEVO"
             subTitle="친환경주 대장"
             btn="매수,투명"
-            colors="#FCFDFF,#7F7FD5,#DE99AB,#ffffff"
+            colors="#FCFDFF,#7F7FD5,#DE99AB,#FFFFFF"
             float="left"
             align="left"
             filter="blur(5px)"
