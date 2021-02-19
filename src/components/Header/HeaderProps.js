@@ -1,23 +1,23 @@
 export const links = [
    {
-      path: "/",
+      to: "/",
    },
    {
-      path: "/header1",
-      params: "param",
-      query: "query",
+      to: "/header1",
+      params: "/param",
    },
    {
-      path: "/header2",
+      to: "/header2",
+      query: "?id=23",
    },
    {
-      path: "/header3",
+      to: "/header3",
    },
    {
-      path: "/login",
+      to: "/login",
    },
    {
-      path: "/join",
+      to: "/join",
    },
 ];
 
@@ -40,8 +40,6 @@ export const contents = [
       string: "login",
    },
    {
-      string: "join",
+      string: "Join",
    },
 ];
-
-export const HeaderTheme = {};
