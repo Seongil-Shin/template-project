@@ -1,3 +1,5 @@
+import './fonts.css'
+
 const size = {
   mobileS: "480px",
   mobileL: "770px",
@@ -25,6 +27,13 @@ const theme = {
     tabletL: `(max-width: ${size.tabletL})`,
     laptop: `(max-width: ${size.laptop})`,
     desktop: `(max-width: ${size.desktop})`,
+  },
+  font: {
+    thin: "SpoqaHanSansNeo-Thin",
+    light: "SpoqaHanSansNeo-Light",
+    regular: "SpoqaHanSansNeo-Regular",
+    medium: "SpoqaHanSansNeo-Medium",
+    bold: "SpoqaHanSansNeo-Bold",
   }
 }
 
