@@ -19,6 +19,9 @@ const theme = {
     gray: "#B8C7E2",
     error: "#DE4D6C",
     highlight: "#7F7FD5",
+    gradationLeft: "#7F7FD5",
+    gradationCenter: "#86A8E7",
+    gradationRight: "#91EAE4",
   },
   size: {
     mobileS: `(max-width: ${size.mobileS})`,
@@ -34,7 +37,8 @@ const theme = {
     regular: "SpoqaHanSansNeo-Regular",
     medium: "SpoqaHanSansNeo-Medium",
     bold: "SpoqaHanSansNeo-Bold",
-  }
+  },
+  boxShadow: "0px 3px 6px #00000029",
 }
 
 export default theme
