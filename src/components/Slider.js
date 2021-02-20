@@ -47,12 +47,9 @@ const TextWrapper = styled.div`
     }
   }
 
-  @media ${(props) => props.theme.size.tabletS} {
-    width: ${(props) => props.width < 60 ? "58" : props.width-2}%;
-  }
   @media ${(props) => props.theme.size.mobileL} {
     width: ${(props) => props.width < 70 ? "88" : props.width-2}%;
-    padding: 6%;
+    padding: ${(props) => props.width < 70 ? "6" : "2"}%;
     margin-left:${(props) => props.float === "left" && "0px"} !important
   }
 `;
@@ -66,64 +63,68 @@ const ImgWrapper = styled.div`
   justify-content: center;
   padding: 1%;
 
-  @media ${(props) => props.theme.size.tabletS} {
-    width: ${(props) => props.width < 60 ? "38" : 98-props.width}%;
-  }
   @media ${(props) => props.theme.size.mobileL} {
     display:none
   }
 `;
 
 const Title = styled.h1`
-  font-size: ${(props) => (props.fontSize === "big" ? "80px" : "60px")};
+  font-size: ${(props) => (props.fontSize === "big" ? "80px" : "64px")};
   font-weight: 600;
   margin-bottom: 20px;
   color: ${(props) => props.color};
   text-align: ${(props) => props.align};
 
   @media ${(props) => props.theme.size.tabletL} {
-    font-size: ${(props) => (props.fontSize === "big" ? "80px" : "45px")};
+    font-size: ${(props) => (props.fontSize === "big" ? "80px" : "64px")};
   }
   @media ${(props) => props.theme.size.tabletS} {
-    font-size: ${(props) => (props.fontSize === "big" ? "65px" : "35px")};
+    font-size: ${(props) => (props.fontSize === "big" ? "65px" : "64px")};
   }
   @media ${(props) => props.theme.size.mobileL} {
-    font-size: ${(props) => (props.fontSize === "big" ? "50px" : "30px")};
+    font-size: ${(props) => (props.fontSize === "big" ? "50px" : "64px")};
   }
   @media ${(props) => props.theme.size.mobileS} {
-    font-size: ${(props) => (props.fontSize === "big" ? "40px" : "30px")};
+    font-size: ${(props) => (props.fontSize === "big" ? "40px" : "48px")};
   }
 `;
 
 const Subtitle = styled.h3`
-  font-size: ${(props) => (props.fontSize === "big" ? "60px" : "45px")};
+  font-size: ${(props) => (props.fontSize === "big" ? "48px" : "24px")};
   color: ${(props) => props.color};
   text-align: ${(props) => props.align};
 
   @media ${(props) => props.theme.size.tabletL} {
-    font-size: ${(props) => (props.fontSize === "big" ? "60px" : "35px")};
+    font-size: ${(props) => (props.fontSize === "big" ? "40px" : "24px")};
   }
   @media ${(props) => props.theme.size.tabletS} {
-    font-size: ${(props) => (props.fontSize === "big" ? "50px" : "30px")};
+    font-size: ${(props) => (props.fontSize === "big" ? "32px" : "24px")};
   }
   @media ${(props) => props.theme.size.mobileL} {
-    font-size: ${(props) => (props.fontSize === "big" ? "40px" : "27px")};
+    font-size: ${(props) => (props.fontSize === "big" ? "24px" : "24px")};
   }
   @media ${(props) => props.theme.size.mobileS} {
-    font-size: ${(props) => (props.fontSize === "big" ? "35px" : "22px")};
+    font-size: ${(props) => (props.fontSize === "big" ? "20px" : "20px")};
   }
 `;
 
 const Button = styled.button`
   color: ${(props) => props.color};
-  font-size: ${(props) => (props.fontSize === "big" ? "25px" : "20px")};
+  font-size: ${(props) => (props.fontSize === "big" ? "24px" : "20px")};
   background-color: ${(props) => props.opacity === "불투명" ? props.bg : "rgba( 255, 255, 255, 0 )"};
-  width: 150px;
-  height: 60px;
+  box-shadow: 0px 3px 6px #00000029;
+  max-width: 252px;
+  width: 60%;
+  height: 64px;
   margin: ${(props) => (props.align === "center" ? "0 auto" : "0")};
   border: 0;
   border-radius: 25px;
   border: 2px solid ${(props) => props.bg};
+
+  @media ${(props) => props.theme.size.mobileS} {
+    font-size: 20px;
+  }
+  
 `;
 
 const Img = styled.img`
