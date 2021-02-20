@@ -50,12 +50,13 @@ export const LinkButton = ({
    isImage = false,
    string,
    buttonStyle = {},
+   name = "",
 }) => {
    return (
       <Link to={{ pathname: to + params, search: query, state: data }}>
-         <StyledLink {...buttonStyle}>
+         <StyledLink {...buttonStyle} className={name}>
             {isImage ? (
-               <img src={string} align="top" alt="pass a src as string=[src]" />
+               <img src={string} alt="pass a src as string=[src]" />
             ) : (
                <span>{string || to}</span>
             )}

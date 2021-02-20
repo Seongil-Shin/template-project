@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { LinkButton } from "../elements/LinkButton";
-import styled, { useTheme } from "styled-components";
+import styled, { css, useTheme } from "styled-components";
 import { useLocation } from "react-router-dom";
 
 const StyledHeader = styled.div`
-   width: ${({ width }) => width || "100%"};
    height: ${({ height }) => height || "64px"};
 
    /*파라미터로 넘어온 걸 우선, 없으면 테마, 없으면 디폴트값*/
@@ -14,10 +13,10 @@ const StyledHeader = styled.div`
          "#FCFDFF"}
       0% 0% no-repeat padding-box;
    box-shadow: 0px 3px 6px #00000029;
-   padding: 0 20%;
+   padding: 0 ${({ halfInWidth }) => halfInWidth - 600}px;
 
    /* 넘칠 시 옆으로 스크롤하되, 스크롤은 숨기기*/
-   overflow: scroll;
+   overflow-x: scroll;
    white-space: nowrap;
 
    -ms-overflow-style: none; /* IE and Edge */
@@ -27,12 +26,48 @@ const StyledHeader = styled.div`
    }
 
    /*margin-left: 전체 넓이에서 패딩 빼고 엘리먼트 넓이의 총합을 빼고 남은 넓이만*/
-   span.right {
-      margin-left: ${({ elemNum }) => 100 - 40 - elemNum * 10}%;
+   div.right {
+      justify-content: flex-end;
    }
-
    /* 폰트 적용 : 테마가 있으면 적용하되, 없으면 상속*/
    font-family: ${({ theme }) => theme && theme.font && theme.font.medium};
+
+   /*휘하 버튼들 크기 조절 tabletL 이상일 때*/
+   span {
+      height: 100%;
+   }
+   span.button {
+      width: 200px;
+   }
+   span.small {
+      width: 100px;
+   }
+   span.round {
+      width: 100px;
+      height: ${({ height }) => height / 2 || "32px"};
+      line-height: ${({ height }) => height / 2 || "32px"};
+   }
+   /*반응형*/
+   ${({ theme }) =>
+      theme &&
+      theme.size &&
+      css`
+         @media screen and ${theme.size.mobileL} {
+            padding: 0 ${({ halfInWidth }) => halfInWidth - 230}px;
+            span.button {
+               width: 100px;
+            }
+         }
+         @media screen and ${theme.size.tabletS} {
+            padding: 0 ${({ halfInWidth }) => halfInWidth - 380}px;
+            span.button {
+               width: 150px;
+            }
+         }
+         @media screen and ${theme.size.tabletL} {
+            padding: 0 ${({ halfInWidth }) => halfInWidth - 500}px;
+         }
+      `}
 `;
 
 export default function HeaderComponent({
@@ -45,6 +80,7 @@ export default function HeaderComponent({
    const [contents, setContents] = useState([]);
    const [left, setLeft] = useState([]);
    const [right, setRight] = useState([]);
+   const [innerWidth, setInnerWidth] = useState(window.innerWidth / 2);
    const location = useLocation();
    const theme = useTheme();
 
@@ -63,17 +99,16 @@ export default function HeaderComponent({
       }
       paths.forEach((path, index) => {
          const isRight = paths.length - index <= putRight;
-
+         let className = "button";
          let style = {
-            width: "10%",
-            height: headerStyle.height || "64px",
             opacity: 0.6,
             color: headerStyle.outColor || color.outColor || "#4F75BB",
             fontSize: headerStyle.fontSize || "14px",
          };
 
          if (index === 0 || isRight) {
-            style = { ...style, width: "5%", opacity: 1 };
+            style = { ...style, opacity: 1 };
+            className = "small";
          }
          if (isRight && index === paths.length - 1) {
             style = {
@@ -82,8 +117,8 @@ export default function HeaderComponent({
                color: headerStyle.onColor || color.onColor || "#1A4188",
                backgroundColor:
                   headerStyle.roundColor || color.roundColor || "#86A8E7",
-               height: "32px",
             };
+            className = "round";
          }
 
          /*on 확인 후 색깔 변경 및 밑줄*/
@@ -106,6 +141,7 @@ export default function HeaderComponent({
                {...path}
                {...contents[index]}
                buttonStyle={style}
+               name={className}
             />
          );
 
@@ -115,10 +151,11 @@ export default function HeaderComponent({
             setLeft((prev) => [...prev, component]);
          }
       });
+      console.log(innerWidth);
    }, [
       link,
-      content,
       paths,
+      content,
       putRight,
       contents,
       headerStyle.roundColor,
@@ -128,21 +165,31 @@ export default function HeaderComponent({
       headerStyle.fontSize,
       location,
       theme,
+      innerWidth,
    ]);
+
+   useEffect(() => {
+      const handle = () => setInnerWidth(window.innerWidth / 2);
+      window.addEventListener("resize", handle);
+      return () => {
+         window.removeEventListener("resize", handle);
+      };
+   }, []);
 
    return (
       <StyledHeader
          {...headerStyle}
          elemNum={paths.length - putRight / 2 - 0.5}
+         halfInWidth={innerWidth}
       >
          {left.map((left) => {
             return left;
          })}
-         <span className="right">
+         <div className="right">
             {right.map((right) => {
                return right;
             })}
-         </span>
+         </div>
       </StyledHeader>
    );
 }
