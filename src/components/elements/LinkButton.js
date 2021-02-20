@@ -4,35 +4,39 @@ import styled, { css } from "styled-components";
 const StyledLink = styled.span`
    display: inline-block;
 
-   width: ${(props) => props.buttonStyle.width || "200px"};
-   height: ${(props) => props.buttonStyle.height || "64px"};
+   width: ${({ width }) => width || "200px"};
+   height: ${({ height }) => height || "64px"};
 
    text-align: center;
-   line-height: ${(props) => props.buttonStyle.height || "64px"};
+   line-height: ${({ height }) => height || "64px"};
 
    img {
       height: 90%;
       vertical-align: middle;
    }
    span {
-      color: ${(props) => props.buttonStyle.color || /*테마*/ "#1A4188"};
-      font-size: ${(props) => props.buttonStyle.fontSize || "14px"};
-      opacity: ${(props) => props.buttonStyle.opacity || "1"};
+      color: ${({ color, theme }) =>
+         color || (theme && theme.color && theme.color.title) || "#1A4188"};
+      font-size: ${({ fontSize }) => fontSize || "14px"};
+      opacity: ${({ opacity }) => opacity || "1"};
    }
-   ${(props) =>
-      props.buttonStyle.isRound &&
+
+   ${({ isRound, backgroundColor, theme }) =>
+      isRound &&
       css`
-         background-color: ${(props) =>
-            props.buttonStyle.backgroundColor || /* 테마*/ "#86A8E7"};
+         background-color: ${backgroundColor ||
+         (theme && theme.color && theme.color.primary) ||
+         "#86A8E7"};
          border-radius: 32px;
       `}
-   ${(props) =>
-      props.buttonStyle.borderBottom &&
+   ${({ borderBottom, color, theme }) =>
+      borderBottom &&
       css`
          box-sizing: border-box;
-         border-bottom: solid;
-         border-bottom-color: ${(props) =>
-            props.buttonStyle.color || /*테마*/ "#1A4188"};
+         border-bottom: 2px solid;
+         border-bottom-color: ${color ||
+         (theme && theme.color && theme.color.title) ||
+         "#1A4188"};
       `}
 `;
 
@@ -49,7 +53,7 @@ export const LinkButton = ({
 }) => {
    return (
       <Link to={{ pathname: to + params, search: query, state: data }}>
-         <StyledLink buttonStyle={buttonStyle}>
+         <StyledLink {...buttonStyle}>
             {isImage ? (
                <img src={string} align="top" alt="pass a src as string=[src]" />
             ) : (

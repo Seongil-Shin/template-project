@@ -3,13 +3,12 @@ import { HashRouter as Router, Route } from "react-router-dom";
 import Home from "../routes/Home";
 import Temp from "../routes/Temp";
 import Header from "./Header/Header";
-import { links, contents } from "./Header/HeaderProps";
 
 function App() {
    return (
       <>
          <Router>
-            <Header link={links} content={contents} />
+            <Header />
             <Route exact path="/" component={Home} />
             <Route path="/header1/:id" component={Temp} />
             <Route exact path="/header2" component={Temp} />
