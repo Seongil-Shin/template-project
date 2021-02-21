@@ -13,11 +13,10 @@ const StyledHeader = styled.div`
    height: ${({ height }) => height || "64px"};
 
    /*파라미터로 넘어온 걸 우선, 없으면 테마, 없으면 디폴트값*/
-   background: ${({ backgroundColor, theme }) =>
-         backgroundColor ||
-         (theme && theme.color && theme.color.white) ||
-         "#FCFDFF"}
-      0% 0% no-repeat padding-box;
+   background-color: ${({ backgroundColor, theme }) =>
+      backgroundColor ||
+      (theme && theme.color && theme.color.white) ||
+      "#FCFDFF"};
    box-shadow: 0px 3px 6px #00000029;
    padding: 0 ${({ halfInWidth }) => halfInWidth - 600}px;
 
@@ -52,8 +51,8 @@ const StyledHeader = styled.div`
    }
    span.round {
       width: 100px;
-      height: ${({ height }) => height / 2 || "32px"};
-      line-height: ${({ height }) => height / 2 || "32px"};
+      height: ${({ roundHeight }) => roundHeight || "32px"};
+      line-height: ${({ roundHeight }) => roundHeight || "32px"};
    }
    /*반응형*/
    ${({ theme }) =>
@@ -123,6 +122,7 @@ const StyledHeader = styled.div`
             onColor : "", 현재 주소 창일시 사용할 버튼의 색깔
             outColor : "", 현재가 아닐 시 사용할 색깔
             roundColor : "", 라운드 버튼의 배경색
+            roundHeight : "", 라운드 버튼의 높이 지정가능
             fontSize : 버튼들의 폰트 크기
          -putRight : 오른쪽에 정렬할 버튼의 개수. 
             디폴트는 login, join 두개가 온다고 가정하여 2
@@ -138,7 +138,7 @@ export default function HeaderComponent({
    const [contents, setContents] = useState([]);
    const [left, setLeft] = useState([]);
    const [right, setRight] = useState([]);
-   const [innerWidth, setInnerWidth] = useState(window.innerWidth / 2);
+   const [halfInWidth, setHalfInWidth] = useState(window.innerWidth / 2);
    const location = useLocation();
    const theme = useTheme();
 
@@ -147,20 +147,21 @@ export default function HeaderComponent({
       setContents(content);
       setLeft([]);
       setRight([]);
-      let color = {};
-      if (theme && theme.color) {
-         color = {
-            outColor: theme.color.text,
-            onColor: theme.color.title,
-            roundColor: theme.color.primary,
-         };
-      }
+      const isTheme = theme && theme.color;
+      const color = {
+         outColor:
+            headerStyle.outColor || (isTheme && isTheme.text) || "#4F75BB",
+         onColor:
+            headerStyle.onColor || (isTheme && isTheme.title) || "#1A4188",
+         roundColor:
+            headerStyle.roundColor || (isTheme && isTheme.primary) || "#86A8E7",
+      };
       paths.forEach((path, index) => {
          const isRight = paths.length - index <= putRight;
          let className = "button";
          let style = {
             opacity: 0.6,
-            color: headerStyle.outColor || color.outColor || "#4F75BB",
+            color: color.outColor,
             fontSize: headerStyle.fontSize || "14px",
          };
 
@@ -172,9 +173,8 @@ export default function HeaderComponent({
             style = {
                ...style,
                isRound: true,
-               color: headerStyle.onColor || color.onColor || "#1A4188",
-               roundColor:
-                  headerStyle.roundColor || color.roundColor || "#86A8E7",
+               color: color.onColor,
+               roundColor: color.roundColor,
             };
             className = "round";
          }
@@ -187,7 +187,7 @@ export default function HeaderComponent({
          ) {
             style = {
                ...style,
-               color: headerStyle.onColor || color.onColor || "#1A4188",
+               color: color.onColor,
                opacity: 1,
                borderBottom: true,
             };
@@ -221,11 +221,11 @@ export default function HeaderComponent({
       headerStyle.fontSize,
       location,
       theme,
-      innerWidth,
+      halfInWidth,
    ]);
 
    useEffect(() => {
-      const handle = () => setInnerWidth(window.innerWidth / 2);
+      const handle = () => setHalfInWidth(window.innerWidth / 2);
       window.addEventListener("resize", handle);
       return () => {
          window.removeEventListener("resize", handle);
@@ -237,7 +237,7 @@ export default function HeaderComponent({
          {...headerStyle}
          elemNum={paths.length}
          putRight={putRight}
-         halfInWidth={innerWidth}
+         halfInWidth={halfInWidth}
       >
          {left.map((left) => {
             return left;
