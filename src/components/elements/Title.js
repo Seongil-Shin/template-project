@@ -1,5 +1,13 @@
 import styled from 'styled-components'
 
+/*
+  props
+    align: text-align
+    size: font-size
+    font: font-family
+    color
+*/
+
 //TODO: 반응형 추가 후 수치들 theme로 조정
 const Title = styled.h2`
   text-align: ${props => props.align || "justify"};

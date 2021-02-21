@@ -1,5 +1,11 @@
 import styled from 'styled-components'
 
+/*
+  props
+    align: text-align
+    mb: margin-bottom
+*/
+
 //TODO: 반응형 추가 후 수치들 theme로 조정
 const Textarea = styled.div`
   display: flex;
