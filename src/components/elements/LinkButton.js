@@ -1,6 +1,25 @@
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 
+//to : url, param : 파라미터, query : 쿼리, data : 넘겨줄 데이터.
+//isImage : 이미지인지 표시, content : 이미지이면 주소, 아니면 쓸 내용
+/*buttonStyle 다음 style들을 객체 형태로 넘김
+   각 요소는 디폴트 값이 정해져 있어서 필요한 것만 넘겨줘도 된다.
+            width : "",
+            height : "",
+            color : "",
+            fontSize : "",
+            opacity : "",
+            isRound : true || false,
+            roundColor : ""             // round 일때만 적용
+            borderBottom : true || false
+
+   color는 넘겨준게 없을 경우 테마 -> 디폴트로 적용됨.
+   테마는 theme.color.title 형식으로 줘야 적용됨. 
+   이 형식이 아니면 없는걸로 간주하고 디폴트값 적용
+*/
+//name : 만약 상위에서 className으로 스타일을 지정하고 싶으면 name을 넘김
+
 const StyledLink = styled.span`
    display: inline-block;
 
@@ -11,7 +30,8 @@ const StyledLink = styled.span`
    line-height: ${({ height }) => height || "64px"};
 
    img {
-      height: 90%;
+      max-width: 100%;
+      max-height: 100%;
       vertical-align: middle;
    }
    span {
@@ -21,10 +41,10 @@ const StyledLink = styled.span`
       opacity: ${({ opacity }) => opacity || "1"};
    }
 
-   ${({ isRound, backgroundColor, theme }) =>
+   ${({ isRound, roundColor, theme }) =>
       isRound &&
       css`
-         background-color: ${backgroundColor ||
+         background-color: ${roundColor ||
          (theme && theme.color && theme.color.primary) ||
          "#86A8E7"};
          border-radius: 32px;
@@ -40,25 +60,23 @@ const StyledLink = styled.span`
       `}
 `;
 
-//path에 주소, isImage에 이미지인지, string에 이미지 주소 또는 문자열, data엔 path로 이동 시 넘길 데이터
-
 export const LinkButton = ({
    to = "/",
-   params = "",
+   param = "",
    query = "",
    data,
    isImage = false,
-   string,
+   content,
    buttonStyle = {},
    name = "",
 }) => {
    return (
-      <Link to={{ pathname: to + params, search: query, state: data }}>
+      <Link to={{ pathname: to + param, search: query, state: data }}>
          <StyledLink {...buttonStyle} className={name}>
             {isImage ? (
-               <img src={string} alt="pass a src as string=[src]" />
+               <img src={content} alt="pass a src as content=[src]" />
             ) : (
-               <span>{string || to}</span>
+               <span>{content || to}</span>
             )}
          </StyledLink>
       </Link>

@@ -27,23 +27,23 @@ const links = [
 const contents = [
    {
       isImage: true,
-      string:
+      content:
          "https://upload.wikimedia.org/wikipedia/commons/6/63/IZONE_Logo.png",
    },
    {
-      string: "header1",
+      content: "header1",
    },
    {
-      string: "header2",
+      content: "header2",
    },
    {
-      string: "header3",
+      content: "header3",
    },
    {
-      string: "login",
+      content: "login",
    },
    {
-      string: "Join",
+      content: "Join",
    },
 ];
 
