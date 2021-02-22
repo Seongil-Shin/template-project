@@ -20,6 +20,7 @@ const Card = styled.div`
   }};
 
   margin: 0 16px;
+  margin-top: 0;
   padding: 32px 24px;
 
   background: ${props => props.color || 'none'};
