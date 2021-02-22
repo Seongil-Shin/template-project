@@ -10,6 +10,19 @@ import bannerImg4 from "../img/ceo.jpg";
 const Bannerwrapper = styled.div`
   height: 90vh;
   width: 100%;
+  & .slick-dots {
+    bottom:0px
+  }
+  & .slick-dots li.slick-active button:before{
+    font-size:15px;
+    opacity: 1;
+    color: #ffffff;
+  }
+  & .slick-dots li button:before{
+    opacity: 0.75;
+    color: #bdbdbd;
+  }
+  }
 `;
 
 var settings = {
