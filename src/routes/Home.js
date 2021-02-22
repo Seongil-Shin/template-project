@@ -1,14 +1,6 @@
 import React from "react";
 import Banner from "../components/Banner";
-<<<<<<< HEAD
-
-export default () => (
-   <>
-      <Banner />
-   </>
-);
-=======
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import Wrapper from "../components/elements/Wrapper"
 import Textarea from "../components/Textarea"
 import Title from "../components/elements/Title"
@@ -19,7 +11,6 @@ import dummy from '../assets/images/dummy.png'
 
 export default () => (
     <>
-      <Header />
       <Banner />
       <Wrapper>
         <Textarea align="center">
@@ -46,4 +37,3 @@ export default () => (
       </Wrapper>
     </>
   );
->>>>>>> feature/3
