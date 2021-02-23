@@ -9,7 +9,27 @@ const getMarginLeft = (elemNum, putRight, b, s) => {
    if (result > 0) return result;
    else return 0;
 };
+const transform = (isDown) => {
+   let y = 0;
+   if (isDown) {
+      y = document.getElementById("Header").clientHeight;
+   }
+   return css`
+      transform: translateY(-${y}px);
+      -webkit-transform: translateY(-${y}px});
+   `;
+};
+const transition = (time) => {
+   return css`
+      -webkit-transition: -webkit-transform ${time}s ease;
+      transition: -webkit-transform ${time}s ease;
+      transition: transform ${time}s ease;
+      transition: transform ${time}s ease, -webkit-transform ${time}s ease;
+   `;
+};
+
 const StyledHeader = styled.div`
+   position: fixed;
    height: ${({ height }) => height || "64px"};
 
    /*파라미터로 넘어온 걸 우선, 없으면 테마, 없으면 디폴트값*/
@@ -28,6 +48,16 @@ const StyledHeader = styled.div`
    scrollbar-width: none; /* Firefox */
    &::-webkit-scrollbar {
       display: none; /* Chrome, Safari, Opera */
+   }
+   z-index: 3000;
+   /* 스윽 사라지게 하는 거*/
+   &.down {
+      ${transform(true)}
+      ${transition(0.7)}
+   }
+   &.up {
+      ${transform(false)}
+      ${transition(0.3)}
    }
 
    /*margin-left: 패딩을 제외한 전체 넓이에서 엘리먼트 넓이의 총합을 빼고 남은 넓이만*/
@@ -90,6 +120,9 @@ const StyledHeader = styled.div`
             span.small {
                width: 60px;
             }
+            span.round {
+               width: 80px;
+            }
             span.right {
                margin-left: 50px;
             }
@@ -139,6 +172,7 @@ export default function HeaderComponent({
    const [left, setLeft] = useState([]);
    const [right, setRight] = useState([]);
    const [halfInWidth, setHalfInWidth] = useState(window.innerWidth / 2);
+   const [className, setClassName] = useState("");
    const location = useLocation();
    const theme = useTheme();
 
@@ -225,19 +259,33 @@ export default function HeaderComponent({
    ]);
 
    useEffect(() => {
-      const handle = () => setHalfInWidth(window.innerWidth / 2);
-      window.addEventListener("resize", handle);
-      return () => {
-         window.removeEventListener("resize", handle);
-      };
-   }, []);
+      const onResize = () => setHalfInWidth(window.innerWidth / 2);
+      const onScroll = () => {
+         const height = document.getElementById("Header").clientHeight;
+         const y = window.scrollY;
 
+         if (className === "down" && y <= height) {
+            setClassName("up");
+         }
+         if (y > height) {
+            setClassName("down");
+         }
+      };
+      window.addEventListener("resize", onResize);
+      window.addEventListener("scroll", onScroll);
+      return () => {
+         window.removeEventListener("resize", onResize);
+         window.removeEventListener("scroll", onScroll);
+      };
+   }, [className]);
    return (
       <StyledHeader
+         id="Header"
          {...headerStyle}
          elemNum={paths.length}
          putRight={putRight}
          halfInWidth={halfInWidth}
+         className={className}
       >
          {left.map((left) => {
             return left;
