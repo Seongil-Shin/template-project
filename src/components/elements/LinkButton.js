@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 
@@ -60,7 +61,7 @@ const StyledLink = styled.span`
 */
 //name : 만약 상위에서 className으로 스타일을 지정하고 싶으면 name을 넘김
 
-export const LinkButton = ({
+const LinkButton = ({
    to = "/",
    param = "",
    query = "",
@@ -82,3 +83,5 @@ export const LinkButton = ({
       </Link>
    );
 };
+
+export default React.memo(LinkButton);

@@ -1,6 +1,5 @@
 import React from "react";
-import { LinkButton } from "../components/elements/LinkButton";
-
+import LinkButton from "../components/elements/LinkButton";
 export default function Temp({ match, location }) {
    // console.log("match", match);
    // console.log("location", location);

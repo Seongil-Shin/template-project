@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LinkButton } from "../elements/LinkButton";
+import LinkButton from "../elements/LinkButton";
 import styled, { css, useTheme } from "styled-components";
 import { useLocation } from "react-router-dom";
 
@@ -9,14 +9,10 @@ const getMarginLeft = (elemNum, putRight, b, s) => {
    if (result > 0) return result;
    else return 0;
 };
-const transform = (isDown) => {
-   let y = 0;
-   if (isDown) {
-      y = document.getElementById("Header").clientHeight;
-   }
+const transform = (y) => {
    return css`
-      transform: translateY(-${y}px);
-      -webkit-transform: translateY(-${y}px});
+      transform: translateY(${y});
+      -webkit-transform: translateY(${y}});
    `;
 };
 const transition = (time) => {
@@ -52,11 +48,11 @@ const StyledHeader = styled.div`
    z-index: 3000;
    /* 스윽 사라지게 하는 거*/
    &.down {
-      ${transform(true)}
+      ${transform("-100%")}
       ${transition(0.7)}
    }
    &.up {
-      ${transform(false)}
+      ${transform("0")}
       ${transition(0.3)}
    }
 
@@ -261,13 +257,12 @@ export default function HeaderComponent({
    useEffect(() => {
       const onResize = () => setHalfInWidth(window.innerWidth / 2);
       const onScroll = () => {
-         const height = document.getElementById("Header").clientHeight;
          const y = window.scrollY;
-
-         if (className === "down" && y <= height) {
+         const h = document.getElementById("Header").clientHeight;
+         if (className === "down" && y <= h) {
             setClassName("up");
          }
-         if (y > height) {
+         if (y > h) {
             setClassName("down");
          }
       };
@@ -278,6 +273,7 @@ export default function HeaderComponent({
          window.removeEventListener("scroll", onScroll);
       };
    }, [className]);
+
    return (
       <StyledHeader
          id="Header"
