@@ -7,6 +7,7 @@ import tmp1 from "../img/tmp1.png";
 import tmp2 from "../img/tmp2.jpg";
 import tmp3 from "../img/tmp3.jpg";
 import tmp4 from "../img/tmp_ceo.jpg";
+import mv from "../img/pano.mp4";
 
 const BANNER_HEIGHT = "90vh"; // banner height
 
@@ -37,7 +38,7 @@ const settings = {
   speed: 500,
   slidesToShow: 1,
   slidesToScroll: 1,
-  autoplay: false,
+  autoplay: true,
   autoplaySpeed: 10000, //(ms)
   pauseOnHover: true,
   arrows: false,
@@ -75,7 +76,7 @@ function Banner() {
           <Contents
             type="2"
             img={tmp2}
-            video="https://static-clova.pstatic.net/static/public/video/CH_OCRmain.mp4"
+            video={mv}
             title="Iz* one me"
             subTitle="하나가 되는 순간 모두가 주목해"
             btn="연장하기,투명"
