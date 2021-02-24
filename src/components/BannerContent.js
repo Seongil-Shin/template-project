@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Parallax } from "react-parallax";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Slider = styled.div`
   & .react-parallax-bgimage {
@@ -100,7 +101,6 @@ const Subtitle = styled.h3`
 `;
 
 const Button = styled.button`
-  color: ${(props) => props.color};
   font-size: ${(props) => (props.fontSize === "big" ? "24px" : "20px")};
   background-color: ${(props) =>
     props.opacity === "불투명" ? props.bg : "rgba( 255, 255, 255, 0 )"};
@@ -112,11 +112,22 @@ const Button = styled.button`
   margin-top: ${(props) => (props.mt > 500 ? "100px" : "20px")};
   border-radius: 25px;
   border: 2px solid ${(props) => props.bg};
+  outline: 0;
+  cursor:pointer;
+
+  & a{
+    text-decoration:none;
+  }
+  & span{
+    color: ${(props) => props.color};
+  }
 
   @media ${(props) => props.theme.size.mobileS} {
     font-size: 20px;
   }
 `;
+
+
 
 const Img = styled.img`
   position: relative;
@@ -191,16 +202,24 @@ function BannerContent(props) {
             >
               {props.subTitle}
             </Subtitle>
-            <Button
-              fontSize={types.fontSize}
-              align={types.align}
-              bg={props.colors.split(",")[2]}
-              color={props.colors.split(",")[3]}
-              opacity={props.btn.split(",")[1]}
-              mt={offsetHeight}
-            >
-              {props.btn.split(",")[0]}
-            </Button>
+            
+              <Button
+                fontSize={types.fontSize}                
+                bg={props.colors.split(",")[2]}
+                color={props.colors.split(",")[3]}
+                opacity={props.btn.split(",")[1]}
+                mt={offsetHeight}
+                align={types.align}
+              >
+                {props?.link?.indexOf('http') < 0 ? (
+                  <Link to={props.link}><span>{props.btn.split(",")[0]}</span></Link>
+                  
+                ) : (
+                  <a href={props.link}><span>{props.btn.split(",")[0]}</span></a>
+                )}
+                
+              </Button>
+            
           </TextWrapper>
           <ImgWrapper width={types.width} float={types.float}>
             <Img src={types.img} />

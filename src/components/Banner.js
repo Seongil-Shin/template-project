@@ -60,8 +60,8 @@ function Banner() {
           <Contents
             type="1"
             bg={tmp1}
-            title="The EndGame"
-            subTitle="Infinity saga Phase 3"
+            title="와우 친구들"
+            subTitle="빡빡이 아조씨야"
             btn="보러가기,불투명"
             colors={
               theme.color.white +
@@ -72,6 +72,7 @@ function Banner() {
               "," +
               theme.color.white
             } //title,subtitle,button-background,button
+            link="/login"
           />
           <Contents
             type="2"
@@ -91,14 +92,15 @@ function Banner() {
             }
             float="right"
             align="left"
+            link="https://www.youtube.com/watch?v=kBXopvFKcBg"
           />
           <Contents
             type="2"
             img={tmp4}
             bg={tmp3}
-            title="GEVO"
-            subTitle="친환경주 대장"
-            btn="매수,투명"
+            title="GUCCI"
+            subTitle="Marchio di lusso italiano"
+            btn="Acquista,투명"
             colors={
               theme.color.white +
               "," +
@@ -111,6 +113,7 @@ function Banner() {
             float="left"
             align="left"
             filter="blur(5px)"
+            link="/login"
           />
         </Slider>
       </Bannerwrapper>
