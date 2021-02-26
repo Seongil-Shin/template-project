@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled, { useTheme } from "styled-components";
 import Slider from "react-slick";
-import Contents from "./BannerContent";
+import Contents from "./BannerComponent";
 
 import tmp1 from "../img/tmp1.png";
 import tmp2 from "../img/tmp2.jpg";
@@ -15,18 +15,15 @@ const Bannerwrapper = styled.div`
   height: ${BANNER_HEIGHT};
   width: 100%;
 
-  & .slick-dots {
-    //dots style
+  & .slick-dots { //dots style
     bottom: 50px;
   }
-  & .slick-dots li.slick-active button:before {
-    //active dots style
+  & .slick-dots li.slick-active button:before { //active dots style
     font-size: 15px;
     opacity: 1;
     color: ${(props) => props.theme.color.highlight};
   }
-  & .slick-dots li button:before {
-    //inactive dots style
+  & .slick-dots li button:before { //inactive dots style
     opacity: 0.75;
     color: ${(props) => props.theme.color.white};
   }
@@ -92,7 +89,7 @@ function Banner() {
             }
             float="right"
             align="left"
-            link="https://www.youtube.com/watch?v=kBXopvFKcBg"
+            link="https://www.youtube.com/watch?v=qrshRevYiiA"
           />
           <Contents
             type="2"

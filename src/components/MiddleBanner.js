@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled, { useTheme } from "styled-components";
-import Contents from "./BannerContent";
+import Contents from "./BannerComponent";
 
 import tmp1 from "../img/tmp4.png";
 
@@ -23,7 +23,7 @@ function MiddleBanner() {
     <>
       <Bannerwrapper>
         <Contents
-          type="3"
+          type="banner"
           bg={tmp1}
           title="The EndGame"
           subTitle="Infinity saga Phase 3"
@@ -37,6 +37,7 @@ function MiddleBanner() {
             "," +
             theme.color.white
           } //title,subtitle,button-background,button
+          link="https://www.youtube.com/watch?v=ijUsSpRVhBU"
         />
       </Bannerwrapper>
     </>

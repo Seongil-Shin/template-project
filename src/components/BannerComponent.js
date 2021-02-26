@@ -21,6 +21,7 @@ const ContentWrapper = styled.div`
   max-width: 1440px;
   margin: 0 auto;
   height: 100%;
+  z-index: 1;
 `;
 const TextWrapper = styled.div`
   float: ${(props) => props.float};
@@ -29,7 +30,7 @@ const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1%;
+  padding: 1% 1% 0 1%;
 
   & > * {
     margin-left: ${(props) => props.float === "left" && "50px"} !important;
@@ -53,7 +54,7 @@ const ImgWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1%;
+  padding: 1% 1% 0 1%;
 
   @media ${(props) => props.theme.size.mobileL} {
     display: none;
@@ -169,9 +170,17 @@ function BannerContent(props) {
     float: props.float
   };
 
-  const type3 = {
+  const typebanner = {
     width: "100",
     height: "30vh",
+    fontSize: "small",
+    align: "center",
+    bg: props.bg
+  };
+
+  const typemobile = {
+    width: "100",
+    height: "460px",
     fontSize: "small",
     align: "center",
     bg: props.bg
