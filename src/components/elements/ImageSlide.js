@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import { transition, transformX } from "../functions/Transition";
+import drag from "../functions/Drag";
 
-const transition = (time) => {
-   return css`
-      -webkit-transition: -webkit-transform ${time}s ease-out;
-      transition: -webkit-transform ${time}s ease-out;
-      transition: transform ${time}s ease-out;
-      transition: transform ${time}s ease-out,
-         -webkit-transform ${time}s ease-out;
-   `;
-};
 const CardDisplay = styled.div`
    display: table;
    position: relative;
@@ -18,9 +11,7 @@ const CardDisplay = styled.div`
    height: 800px;
    left: ${({ left }) => left}px;
 
-   transform: translateX(${({ xTranslate }) => xTranslate}px);
-   -webkit-transform: translateX(${({ xTranslate }) => xTranslate}px);
-
+   ${({ xTranslate }) => transformX(xTranslate)}
    ${({ time }) => transition(time)}
 
    span {
@@ -37,87 +28,86 @@ const CardDisplay = styled.div`
 //cards 에 image : 주소, subject : 제목, description : 내용 으로 넘김
 function ImageSlide({ inputCards = [] }) {
    const [cards, setCards] = useState([]);
-   const [left, setLeft] = useState(
-      (window.innerWidth - 500) / 2 - inputCards.length * 500
+
+   const [width, setWidth] = useState(500);
+   const [frontCardWidth, setFCWidth] = useState(
+      (window.innerWidth - width) / 2
    );
+   const [left, setLeft] = useState(frontCardWidth - inputCards.length * width);
+
    const [xTranslate, setXTranslate] = useState(0);
    const [time, setTime] = useState(0.5);
+   const [refresh, setRefresh] = useState(0);
 
    useEffect(() => {
       setCards([...inputCards, ...inputCards, ...inputCards]);
    }, [inputCards]);
 
    useEffect(() => {
-      const elmnt = document.getElementById("CardDisplay");
-      let pos = 0;
-      const width = 500;
-      const lapseWidth = inputCards.length * width;
-      const frontCard = (window.innerWidth - width) / 2;
-
-      const dragMouseDown = (e) => {
-         e = e || window.event;
-         e.preventDefault();
-         pos = e.clientX;
-         document.onmouseup = closeDragElement;
-         document.onmousemove = elementDrag;
-      };
-      const elementDrag = (e) => {
-         e = e || window.event;
-         e.preventDefault();
-         elmnt.style.left = left - pos + e.clientX + "px";
-      };
-      const closeDragElement = (e) => {
-         document.onmouseup = null;
-         document.onmousemove = null;
-
-         let cur = left - pos + e.clientX;
-         let start = frontCard - lapseWidth;
-         let end = frontCard - lapseWidth * 2 + width;
+      const callback = (cur) => {
+         const lapseWidth = inputCards.length * width;
+         const start = frontCardWidth - lapseWidth;
+         const end = frontCardWidth - lapseWidth * 2 + width;
+         const rest = -((cur - frontCardWidth) % width);
+         const wid2 = width / 2;
 
          setTime(0.3);
-         if (cur > start + 250) {
-            cur -= lapseWidth;
-            setXTranslate(-((cur - frontCard) % width)); // 오른쪽으로 끌어당김
-         } else if (cur <= start + 250 && cur > end - 250) {
-            if (left + 250 < cur) {
-               setXTranslate(-((cur - frontCard) % width)); // 오른쪽
-            } else if (left <= cur && left + 250 >= cur) {
-               setXTranslate(-(width + ((cur - frontCard) % width)));
-            } else if (left > cur && left - 250 <= cur) {
-               setXTranslate(-((cur - frontCard) % width));
-            } else if (left - 250 > cur) {
-               // 왼쪽
-               setXTranslate(-(width + ((cur - frontCard) % width)));
+
+         if (cur > start + wid2) {
+            setXTranslate(rest); // 오른쪽으로 끌어당김
+         } else if (cur <= start + wid2 && cur > end - wid2) {
+            if (left + wid2 < cur) {
+               setXTranslate(rest);
+            } else if (left < cur && left + wid2 >= cur) {
+               setXTranslate(rest - width);
+            } else if (left > cur && left - wid2 <= cur) {
+               setXTranslate(rest);
+            } else if (left - wid2 > cur) {
+               setXTranslate(rest - width);
             }
-         } else if (cur <= end - 250) {
-            cur += lapseWidth;
-            setXTranslate(-(width + ((cur - frontCard) % width))); //왼쪽으로 끌어당김
+         } else if (cur <= end - wid2) {
+            setXTranslate(rest - width); //왼쪽으로 끌어당김
          }
 
          setLeft(cur);
-         elmnt.style.left = cur + "px";
       };
-
-      elmnt.onmousedown = dragMouseDown;
-   }, [left, inputCards.length]);
+      drag(document.getElementById("CardDisplay"), left, callback);
+   }, [left, inputCards.length, frontCardWidth, width]);
 
    useEffect(() => {
       const elmnt = document.getElementById("CardDisplay");
+      let newLeft = left + xTranslate;
+
+      const lapseWidth = inputCards.length * width;
+      const frontFirst = frontCardWidth - lapseWidth + width;
+      const rearLast = frontCardWidth - lapseWidth * 2;
+
       const init = () => {
-         const newLeft =
-            parseInt(elmnt.style.left.slice(0, elmnt.style.left.length - 2)) +
-            xTranslate;
+         if (newLeft <= rearLast) {
+            newLeft += lapseWidth;
+         } else if (newLeft >= frontFirst) {
+            newLeft -= +lapseWidth;
+         }
          setLeft(newLeft);
          elmnt.style.left = newLeft + "px";
          setTime(0);
          setXTranslate(0);
+         setRefresh((prev) => prev + 1);
       };
       elmnt.addEventListener("transitionend", init);
 
       return () => {
          elmnt.removeEventListener("transitionend", init);
       };
-   }, [xTranslate]);
+   }, [xTranslate, left, inputCards.length, frontCardWidth, width]);
+
+   useEffect(() => {
+      const id = setInterval(() => {
+         setTime(0.3);
+         setXTranslate(-500);
+      }, 5000);
+      return () => clearInterval(id);
+   }, [refresh]);
 
    return (
       <CardDisplay

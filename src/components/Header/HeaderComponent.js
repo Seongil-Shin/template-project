@@ -2,26 +2,13 @@ import React, { useEffect, useState } from "react";
 import LinkButton from "../elements/LinkButton";
 import styled, { css, useTheme } from "styled-components";
 import { useLocation } from "react-router-dom";
+import { transformY, transition } from "../functions/Transition";
 
 //margin left 구하기
 const getMarginLeft = (elemNum, putRight, b, s) => {
    const result = b * (elemNum - putRight - 1) + s * (putRight + 1);
    if (result > 0) return result;
    else return 0;
-};
-const transform = (y) => {
-   return css`
-      transform: translateY(${y});
-      -webkit-transform: translateY(${y}});
-   `;
-};
-const transition = (time) => {
-   return css`
-      -webkit-transition: -webkit-transform ${time}s ease;
-      transition: -webkit-transform ${time}s ease;
-      transition: transform ${time}s ease;
-      transition: transform ${time}s ease, -webkit-transform ${time}s ease;
-   `;
 };
 
 const StyledHeader = styled.div`
@@ -48,11 +35,11 @@ const StyledHeader = styled.div`
    z-index: 3000;
    /* 스윽 사라지게 하는 거*/
    &.down {
-      ${transform("-100%")}
+      ${transformY("-100%")}
       ${transition(0.7)}
    }
    &.up {
-      ${transform("0")}
+      ${transformY("0")}
       ${transition(0.3)}
    }
 
