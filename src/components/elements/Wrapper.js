@@ -13,10 +13,14 @@ const Wrapper = styled.div`
 
   width: 1200px;
   margin: 0 auto;
-  padding: 64px;
+  padding: 0;
 
   background: ${({ theme }) => theme.color.white};
   border-radius: 32px;
+
+  & > * {
+    margin: 64px;
+  }
 `
 
 export default Wrapper
