@@ -17,9 +17,7 @@ const StyledHeader = styled.div`
 
    /*파라미터로 넘어온 걸 우선, 없으면 테마, 없으면 디폴트값*/
    background-color: ${({ backgroundColor, theme }) =>
-      backgroundColor ||
-      (theme && theme.color && theme.color.white) ||
-      "#FCFDFF"};
+      backgroundColor || theme.color.white || "#FCFDFF"};
    box-shadow: 0px 3px 6px #00000029;
    padding: 0 ${({ halfInWidth }) => halfInWidth - 600}px;
 
@@ -50,7 +48,7 @@ const StyledHeader = styled.div`
    }
 
    /* 폰트 적용 : 테마가 있으면 적용하되, 없으면 상속*/
-   font-family: ${({ theme }) => theme && theme.font && theme.font.medium};
+   font-family: ${({ theme }) => theme.font.medium};
 
    /*휘하 버튼들 크기 조절 tabletL 이상일 때*/
    span {
@@ -69,8 +67,6 @@ const StyledHeader = styled.div`
    }
    /*반응형*/
    ${({ theme }) =>
-      theme &&
-      theme.size &&
       css`
          @media screen and ${theme.size.tabletL} {
             padding: 0 ${({ halfInWidth }) => halfInWidth - 500}px;
@@ -164,14 +160,10 @@ export default function HeaderComponent({
       setContents(content);
       setLeft([]);
       setRight([]);
-      const isTheme = theme && theme.color;
       const color = {
-         outColor:
-            headerStyle.outColor || (isTheme && isTheme.text) || "#4F75BB",
-         onColor:
-            headerStyle.onColor || (isTheme && isTheme.title) || "#1A4188",
-         roundColor:
-            headerStyle.roundColor || (isTheme && isTheme.primary) || "#86A8E7",
+         outColor: headerStyle.outColor || theme.color.text || "#4F75BB",
+         onColor: headerStyle.onColor || theme.color.title || "#1A4188",
+         roundColor: headerStyle.roundColor || theme.color.primary || "#86A8E7",
       };
       paths.forEach((path, index) => {
          const isRight = paths.length - index <= putRight;
