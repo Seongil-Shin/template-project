@@ -10,16 +10,21 @@ import bg from "../img/main_input_bg.png";
 
 const BANNER_HEIGHT = "460"; // banner height(vh)
 
+const Article = styled.div`
+  width:100%;
+  height:460px;
+  margin-top:100px;
+`;
+
 const Bannerwrapper = styled.div`
   height: ${BANNER_HEIGHT}px;
   width: 400px;
   position:relative;
   left:100px;
-  margin-top:100px;
-
+  float:left;
   & .slick-dots { //dots style
     bottom: 50px;
-    left:300px;
+    z-index:20
   }
   & .slick-dots li.slick-active button:before { //active dots style
     font-size: 15px;
@@ -30,6 +35,11 @@ const Bannerwrapper = styled.div`
     opacity: 0.75;
     color: ${(props) => props.theme.color.error};
   }
+`;
+
+const DivWrapper = styled.div`
+  float:left;
+  width:50%;
 `;
 
 const Img = styled.img`
@@ -61,66 +71,73 @@ function Temp2() {
 
   return (
     <>
-      <Bannerwrapper>
-        <Img src={bg}/>
-        <Slider {...settings}>
-          <Contents
-            type="mobile"
-            bg={tmp1}
-            title="와우 친구들"
-            subTitle="빡빡이 아조씨야"
-            btn="보러가기,불투명"
-            colors={
-              theme.color.white +
-              "," +
-              theme.color.gray +
-              "," +
-              theme.color.secondary +
-              "," +
-              theme.color.white
-            } //title,subtitle,button-background,button
-            link="/login"
-          />
-          <Contents
-            type="mobile"
-            bg={tmp2}
-            title="Iz* one me"
-            subTitle="하나가 되는 순간 모두가 주목해"
-            btn="연장하기,투명"
-            colors={
-              theme.color.white +
-              "," +
-              theme.color.secondary +
-              "," +
-              theme.color.primary +
-              "," +
-              theme.color.white
-            }
-            float="right"
-            align="left"
-            link="https://www.youtube.com/watch?v=qrshRevYiiA"
-          />
-          <Contents
-            type="mobile"
-            bg={tmp1}
-            title="Iz* one me"
-            subTitle="하나가 되는 순간 모두가 주목해"
-            btn="연장하기,투명"
-            colors={
-              theme.color.white +
-              "," +
-              theme.color.secondary +
-              "," +
-              theme.color.primary +
-              "," +
-              theme.color.white
-            }
-            float="right"
-            align="left"
-            link="https://www.youtube.com/watch?v=qrshRevYiiA"
-          />
-        </Slider>
-      </Bannerwrapper>
+      <Article>
+        <DivWrapper>
+          <Bannerwrapper>
+            <Img src={bg}/>
+            <Slider {...settings}>
+              <Contents
+                type="mobile"
+                bg={tmp1}
+                title="와우 친구들"
+                subTitle="빡빡이 아조씨야"
+                btn="보러가기,불투명"
+                colors={
+                  theme.color.white +
+                  "," +
+                  theme.color.gray +
+                  "," +
+                  theme.color.secondary +
+                  "," +
+                  theme.color.white
+                } //title,subtitle,button-background,button
+                link="/login"
+              />
+              <Contents
+                type="mobile"
+                bg={tmp2}
+                title="Iz* one me"
+                subTitle="하나가 되는 순간 모두가 주목해"
+                btn="연장하기,투명"
+                colors={
+                  theme.color.white +
+                  "," +
+                  theme.color.secondary +
+                  "," +
+                  theme.color.primary +
+                  "," +
+                  theme.color.white
+                }
+                float="right"
+                align="left"
+                link="https://www.youtube.com/watch?v=qrshRevYiiA"
+              />
+              <Contents
+                type="mobile"
+                bg={tmp1}
+                title="Iz* one me"
+                subTitle="하나가 되는 순간 모두가 주목해"
+                btn="연장하기,투명"
+                colors={
+                  theme.color.white +
+                  "," +
+                  theme.color.secondary +
+                  "," +
+                  theme.color.primary +
+                  "," +
+                  theme.color.white
+                }
+                float="right"
+                align="left"
+                link="https://www.youtube.com/watch?v=qrshRevYiiA"
+              />
+            </Slider>
+          </Bannerwrapper>
+        </DivWrapper>
+        <DivWrapper>
+          hello
+        </DivWrapper>
+      </Article>
       <MiddleBanner/>
     </>
   );
