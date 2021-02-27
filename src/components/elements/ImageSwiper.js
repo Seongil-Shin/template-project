@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
-import { transition, transformX } from "../functions/Transition";
+import { transition } from "../functions/Transition";
 import drag from "../functions/Drag";
 
 const CardDisplay = styled.div`
@@ -10,7 +10,6 @@ const CardDisplay = styled.div`
    width: ${({ num }) => num * 3 * 500}px;
    height: 800px;
 
-   ${({ xTranslate }) => transformX(xTranslate)}
    ${({ time }) => transition(time)}
    ${({ theme }) => css`
       color: ${theme.color.white || "#FCFDFF"};
@@ -70,7 +69,6 @@ function ImageSwiper({ inputCards = [] }) {
    const [frontCardWidth, setFCWidth] = useState(
       (window.innerWidth - width) / 2
    );
-   const [xTranslate, setXTranslate] = useState(0);
    const [time, setTime] = useState(0.5);
    const [refresh, setRefresh] = useState(0);
    const [current, setCurrent] = useState(0);
@@ -80,6 +78,7 @@ function ImageSwiper({ inputCards = [] }) {
    }, [inputCards]);
 
    useEffect(() => {
+      const elmnt = document.getElementById("CardDisplay");
       const callback = (cur, left) => {
          const lapse = inputCards.length * width;
          const start = frontCardWidth - lapse;
@@ -100,19 +99,17 @@ function ImageSwiper({ inputCards = [] }) {
          }
 
          if (pullRight) {
-            setXTranslate(rest);
+            elmnt.style.transform = `translateX(+${rest}px)`;
          } else {
-            setXTranslate(rest - width); //왼쪽으로 끌어당김
+            elmnt.style.transform = `translateX(${rest - width}px)`; //왼쪽으로 끌어당김
          }
       };
       drag(document.getElementById("CardDisplay"), callback);
-   }, [inputCards.length, frontCardWidth, width]);
 
-   useEffect(() => {
-      const elmnt = document.getElementById("CardDisplay");
       const init = () => {
          let newLeft =
-            xTranslate - parseInt(elmnt.style.left.replace(/[^0-9]/g, ""));
+            parseInt(elmnt.style.transform.replace(/[^-.0-9]/g, "")) -
+            parseInt(elmnt.style.left.replace(/[^0-9]/g, ""));
 
          const lapse = inputCards.length * width;
          const frontFirst = frontCardWidth - lapse + width;
@@ -125,19 +122,22 @@ function ImageSwiper({ inputCards = [] }) {
          }
          elmnt.style.left = newLeft + "px";
          setTime(0);
-         setXTranslate(0);
+         elmnt.style.transform = `translateX(0px)`;
+
          setRefresh((prev) => prev + 1);
          setCurrent(Math.abs((newLeft + lapse - frontCardWidth) / width));
       };
 
       elmnt.addEventListener("transitionend", init);
       return () => elmnt.removeEventListener("transitionend", init);
-   }, [xTranslate, inputCards.length, frontCardWidth, width]);
+   }, [inputCards.length, frontCardWidth, width]);
 
    useEffect(() => {
       const id = setInterval(() => {
          setTime(0.2);
-         setXTranslate(-500);
+         document.getElementById(
+            "CardDisplay"
+         ).style.transform = `translateX(-500px)`;
       }, 5000);
       return () => clearInterval(id);
    }, [refresh]);
@@ -149,7 +149,6 @@ function ImageSwiper({ inputCards = [] }) {
             draggable
             id="CardDisplay"
             num={inputCards.length}
-            xTranslate={xTranslate}
             time={time}
             style={{ left: frontCardWidth - inputCards.length * width }}
          >
