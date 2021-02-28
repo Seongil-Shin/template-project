@@ -4,6 +4,7 @@ import Home from "../routes/Home";
 import Temp from "../routes/Temp";
 import Temp2 from "../routes/Temp2";
 import Header from "./Header/Header";
+import Footer from "./Footer";
 
 function App() {
    return (
@@ -17,6 +18,7 @@ function App() {
             <Route exact path="/login" component={Temp} />
             <Route exact path="/join" component={Temp} />
             <Route exact path="/test" component={Temp2} />
+            <Footer/>
          </Router>
       </>
    );

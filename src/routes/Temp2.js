@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { useTheme } from "styled-components";
 import Slider from "react-slick";
 import Contents from "../components/BannerComponent";
@@ -8,22 +8,22 @@ import tmp1 from "../img/tmp1.png";
 import tmp2 from "../img/tmp2.jpg";
 import bg from "../img/main_input_bg.png";
 
-const BANNER_HEIGHT = "460"; // banner height(vh)
+const BANNER_HEIGHT = "460px";
 
 const Article = styled.div`
-  width:100%;
-  height:460px;
+  width:100%;  
   margin-top:100px;
 `;
 
 const Bannerwrapper = styled.div`
-  height: ${BANNER_HEIGHT}px;
   width: 400px;
   position:relative;
   left:100px;
   float:left;
   & .slick-dots { //dots style
-    bottom: 50px;
+    position:absolute;
+    left:${(props) => props.posX-240}px;
+    bottom: 50px;    
     z-index:20
   }
   & .slick-dots li.slick-active button:before { //active dots style
@@ -41,11 +41,10 @@ const DivWrapper = styled.div`
   float:left;
   width:50%;
 `;
-
 const Img = styled.img`
-  
   position:absolute;
-  z-index:10
+  z-index:10;
+  -webkit-user-drag: none;
 `;
 
 const settings = {
@@ -55,28 +54,55 @@ const settings = {
   slidesToShow: 1,
   slidesToScroll: 1,
   autoplay: true,
-  autoplaySpeed: 10000, //(ms)
+  autoplaySpeed: 3000, //(ms)
   pauseOnHover: true,
   arrows: false,
-  dots: true
-  //prevArrow : "<button type='button' class='slick-prev'>Previous</button>",		// html 설정 가능
-  //nextArrow : "<button type='button' class='slick-next'>Next</button>",
-  //dotsClass : "slick-dots",//css class 지정도 지정 가능
+  dots: true,
+  customPaging: i => (
+    <div
+      style={{
+        width: "30px",
+        color: "blue",
+        border: "1px blue solid"
+      }}
+    >
+      &nbsp;
+    </div>
+  )
 };
 
 function Temp2() {
   const theme = useTheme();
+  const [posX, setPosX] = useState();
+  let target;    
 
-  useEffect(() => {}, []);
+  const getTargetPosition = () => {
+    target = document.getElementById('textBox'); // 요소의 id 값이 target이라 가정
+    const clientRect = target.getBoundingClientRect(); // DomRect 구하기 (각종 좌표값이 들어있는 객체)    
+    const relativeLeft = clientRect.left; // Viewport의 시작지점을 기준으로한 상대좌표 X 값.
+
+    setPosX(relativeLeft)
+  };
+
+  useEffect(() => {
+    target = document.getElementById('textBox'); // 요소의 id 값이 target이라 가정
+    const clientRect = target.getBoundingClientRect(); // DomRect 구하기 (각종 좌표값이 들어있는 객체)    
+    const relativeLeft = clientRect.left; // Viewport의 시작지점을 기준으로한 상대좌표 X 값.
+  
+    setPosX(relativeLeft)
+    
+    window.addEventListener("resize", getTargetPosition);    
+  }, []);
 
   return (
     <>
       <Article>
         <DivWrapper>
-          <Bannerwrapper>
+          <Bannerwrapper posX={posX}>
             <Img src={bg}/>
-            <Slider {...settings}>
+            <Slider {...settings} >
               <Contents
+                height={BANNER_HEIGHT}
                 type="mobile"
                 bg={tmp1}
                 title="와우 친구들"
@@ -94,6 +120,7 @@ function Temp2() {
                 link="/login"
               />
               <Contents
+                height={BANNER_HEIGHT}
                 type="mobile"
                 bg={tmp2}
                 title="Iz* one me"
@@ -108,11 +135,10 @@ function Temp2() {
                   "," +
                   theme.color.white
                 }
-                float="right"
-                align="left"
                 link="https://www.youtube.com/watch?v=qrshRevYiiA"
               />
               <Contents
+                height={BANNER_HEIGHT}
                 type="mobile"
                 bg={tmp1}
                 title="Iz* one me"
@@ -127,15 +153,24 @@ function Temp2() {
                   "," +
                   theme.color.white
                 }
-                float="right"
-                align="left"
+
                 link="https://www.youtube.com/watch?v=qrshRevYiiA"
               />
             </Slider>
           </Bannerwrapper>
         </DivWrapper>
-        <DivWrapper>
-          hello
+        <DivWrapper id="textBox">
+          <Contents
+            height={BANNER_HEIGHT}
+            type="2"
+            title="Iz* one me"
+            subTitle="하나가 되는 순간 모두가 주목해"
+            colors={
+              theme.color.primary +
+              "," +
+              theme.color.secondary
+            }
+          />
         </DivWrapper>
       </Article>
       <MiddleBanner/>

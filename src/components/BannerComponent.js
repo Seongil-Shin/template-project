@@ -109,8 +109,8 @@ const Button = styled.button`
   max-width: 252px;
   width: 60%;
   height: 64px;
-  margin: ${(props) => (props.align === "center" ? "0 auto" : "0")};
-  margin-top: ${(props) => (props.mt > 500 ? "100px" : "20px")};
+  margin: ${(props) => (props.align === "center" ? "0 auto" : "0")};  
+  margin-top: 20px;
   border-radius: 25px;
   border: 2px solid ${(props) => props.bg};
   outline: 0;
@@ -135,6 +135,7 @@ const Img = styled.img`
   left: 50%;
   transform: translateX(-50%);
   max-width: 350px;
+  -webkit-user-drag: none;
 `;
 
 const Video = styled.video`
@@ -157,12 +158,10 @@ function BannerContent(props) {
     ...def,
     bg: props.bg,
     img: "",
-    height: "90vh"
   };
 
   const type2 = {
     width: "50",
-    height: "90vh",
     bg: props.bg,
     fontSize: "middle",
     align: props.align,
@@ -171,8 +170,7 @@ function BannerContent(props) {
   };
 
   const typebanner = {
-    width: "100",
-    height: "30vh",
+    width: "100",    
     fontSize: "small",
     align: "center",
     bg: props.bg
@@ -180,59 +178,60 @@ function BannerContent(props) {
 
   const typemobile = {
     width: "100",
-    height: "460px",
     fontSize: "small",
     align: "center",
     bg: props.bg
   };
 
   const [types, setTypes] = useState(def);
-  let offsetHeight;
+
   useEffect(() => {
     setTypes(eval("type" + props.type));
   }, []);
 
   return (
-    <Slider filter={props.filter} bgImage={types.bg} height={types.height}>
+    <Slider filter={props.filter} bgImage={types.bg} height={props.height}>
       <Parallax bgImage={types.bg} strength={400}>
         <ContentWrapper id="contentWrapper">
-          <TextWrapper width={types.width} float={types.float}>
+          <TextWrapper width={props.img ? types.width : 100} float={types.float}>
             <Title
               fontSize={types.fontSize}
               align={types.align}
-              color={props.colors.split(",")[0]}
+              color={props.colors?.split(",")[0]}
             >
               {props.title}
             </Title>
             <Subtitle
               fontSize={types.fontSize}
               align={types.align}
-              color={props.colors.split(",")[1]}
+              color={props.colors?.split(",")[1]}
             >
               {props.subTitle}
             </Subtitle>
-            
+            {props.btn && (
               <Button
                 fontSize={types.fontSize}                
-                bg={props.colors.split(",")[2]}
-                color={props.colors.split(",")[3]}
-                opacity={props.btn.split(",")[1]}
-                mt={offsetHeight}
+                bg={props.colors?.split(",")[2]}
+                color={props.colors?.split(",")[3]}
+                opacity={props.btn?.split(",")[1]}
                 align={types.align}
               >
                 {props?.link?.indexOf('http') < 0 ? (
-                  <Link to={props.link}><span>{props.btn.split(",")[0]}</span></Link>
+                  <Link to={props.link}><span>{props.btn?.split(",")[0]}</span></Link>
                   
                 ) : (
-                  <a href={props.link}><span>{props.btn.split(",")[0]}</span></a>
+                  <a href={props.link}><span>{props.btn?.split(",")[0]}</span></a>
                 )}
                 
               </Button>
-            
+            )}
           </TextWrapper>
-          <ImgWrapper width={types.width} float={types.float}>
+          {props.img && (
+            <ImgWrapper width={types.width} float={types.float}>
             <Img src={types.img} />
           </ImgWrapper>
+          )}
+          
           {props.video && (
             <Video autoPlay loop muted preload="auto">
               <source src={props.video} type="video/mp4" />

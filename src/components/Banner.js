@@ -9,10 +9,9 @@ import tmp3 from "../img/tmp3.jpg";
 import tmp4 from "../img/tmp_ceo.jpg";
 import mv from "../img/pano.mp4";
 
-const BANNER_HEIGHT = "90vh"; // banner height
+const BANNER_HEIGHT = "90vh";
 
 const Bannerwrapper = styled.div`
-  height: ${BANNER_HEIGHT};
   width: 100%;
 
   & .slick-dots { //dots style
@@ -55,6 +54,7 @@ function Banner() {
       <Bannerwrapper>
         <Slider {...settings}>
           <Contents
+            height={BANNER_HEIGHT}
             type="1"
             bg={tmp1}
             title="와우 친구들"
@@ -72,6 +72,7 @@ function Banner() {
             link="/login"
           />
           <Contents
+            height={BANNER_HEIGHT}
             type="2"
             img={tmp2}
             video={mv}
@@ -92,6 +93,7 @@ function Banner() {
             link="https://www.youtube.com/watch?v=qrshRevYiiA"
           />
           <Contents
+            height={BANNER_HEIGHT}          
             type="2"
             img={tmp4}
             bg={tmp3}

@@ -4,15 +4,7 @@ import Contents from "./BannerComponent";
 
 import tmp1 from "../img/tmp4.png";
 
-const BANNER_HEIGHT = "30vh"; // banner height
-
-const Bannerwrapper = styled.div`
-  height: ${BANNER_HEIGHT};
-  width: 100%;
-  & .react-parallax-content {
-    height: ${BANNER_HEIGHT};
-  }
-`;
+const BANNER_HEIGHT = "30vh";
 
 function MiddleBanner() {
   const theme = useTheme();
@@ -21,8 +13,8 @@ function MiddleBanner() {
 
   return (
     <>
-      <Bannerwrapper>
         <Contents
+          height={BANNER_HEIGHT}
           type="banner"
           bg={tmp1}
           title="The EndGame"
@@ -39,7 +31,6 @@ function MiddleBanner() {
           } //title,subtitle,button-background,button
           link="https://www.youtube.com/watch?v=ijUsSpRVhBU"
         />
-      </Bannerwrapper>
     </>
   );
 }
