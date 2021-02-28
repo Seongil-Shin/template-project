@@ -6,7 +6,7 @@ export default function drag(elmnt, callback) {
       e = e || window.event;
       e.preventDefault();
       pos = e.clientX;
-      firstLeft = -parseInt(elmnt.style.left.replace(/[^0-9]/g, ""));
+      firstLeft = parseInt(elmnt.style.left.replace(/[^-.0-9]/g, ""));
       document.onmouseup = closeDragElement;
       document.onmousemove = elementDrag;
    };
@@ -22,7 +22,6 @@ export default function drag(elmnt, callback) {
       const cur = firstLeft - pos + e.clientX;
 
       callback(cur, firstLeft);
-
       elmnt.style.left = cur + "px";
    };
 

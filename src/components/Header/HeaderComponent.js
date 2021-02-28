@@ -2,7 +2,22 @@ import React, { useEffect, useState } from "react";
 import LinkButton from "../elements/LinkButton";
 import styled, { css, useTheme } from "styled-components";
 import { useLocation } from "react-router-dom";
-import { transformY, transition } from "../functions/Transition";
+
+const transition = (time) => {
+   return css`
+      -webkit-transition: -webkit-transform ${time}s ease-out;
+      transition: -webkit-transform ${time}s ease-out;
+      transition: transform ${time}s ease-out;
+      transition: transform ${time}s ease-out,
+         -webkit-transform ${time}s ease-out;
+   `;
+};
+const transformY = (y) => {
+   return css`
+      transform: translateY(${y});
+      -webkit-transform: translateY(${y}});
+   `;
+};
 
 //margin left 구하기
 const getMarginLeft = (elemNum, putRight, b, s) => {

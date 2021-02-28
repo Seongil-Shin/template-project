@@ -1,77 +1,79 @@
 import React, { useEffect, useState } from "react";
-import styled, { css } from "styled-components";
-import { transition } from "../functions/Transition";
+import styled, { css, useTheme } from "styled-components";
 import drag from "../functions/Drag";
 
 const CardDisplay = styled.div`
    display: table;
    position: relative;
    z-index: 1000;
-   width: ${({ num }) => num * 3 * 500}px;
-   height: 800px;
 
-   ${({ time }) => transition(time)}
-   ${({ theme }) => css`
-      color: ${theme.color.white || "#FCFDFF"};
-      font-family: ${theme.font.bold};
-   `}
+   ${({ width, fontColor, num, theme }) => css`
+      width: ${num * 3 * width}px;
+      height: ${width * 1.3}px;
 
-   div {
-      opacity: 0.1;
-      margin: 40px 0;
-   }
-   span {
-      display: table-cell;
-      vertical-align: middle;
-      padding: 0 50px;
-      opacity: 0.3;
-      width: 500px;
-   }
-   span.current {
-      opacity: 1;
+      color: ${fontColor || theme.color.white || "#FCFDFF"};
+
       div {
-         transition: all 0.3s;
+         opacity: 0;
+         height: ${width * 0.1}px;
+      }
+      span {
+         display: table-cell;
+         vertical-align: middle;
+         padding: 0 ${width * 0.05}px;
+         opacity: 0.3;
+         width: ${width}px;
+      }
+      span.current {
          opacity: 1;
+         div {
+            transition: opacity 0.3s linear 0.1s;
+            opacity: 1;
+         }
+         div.subject {
+            font-size: ${width * 0.07}px;
+            font-family: ${({ theme }) => theme.font.bold};
+         }
+         div.description {
+            font-size: ${width * 0.06}px;
+            font-family: ${theme.font.regular};
+         }
       }
-      div.subject {
-         font-size: 40px;
+      img {
+         width: ${width * 0.9}px;
+         height: auto;
+         border-radius: 10px;
       }
-      div.description {
-         font-size: 30px;
-      }
-   }
-   img {
-      top: 400px;
-      width: 400px;
-      height: auto;
-   }
+   `}
 `;
 
 const Swiper = styled.div`
    position: relative;
+   overflow: hidden;
+   background-color: ${({ bgColor }) => bgColor};
    span.frame {
       display: inline-block;
       position: absolute;
-      left: ${({ frontCardWidth }) => frontCardWidth}px;
-      width: 500px;
-      height: 800px;
       z-index: 0;
-      background-color: ${({ theme }) => theme.color.gray || "#B8C7E2"};
-      border-radius: 100px;
+      background-color: ${({ theme, frameColor }) =>
+         frameColor || theme.color.gray || "#B8C7E2"};
+      ${({ width }) => css`
+         left: ${(window.innerWidth - width) / 2}px;
+         width: ${width}px;
+         height: ${width * 1.3}px;
+         border-radius: ${width * 0.1}px;
+      `}
    }
 `;
 
 //cards 에 image : 주소, subject : 제목, description : 내용 으로 넘김
-function ImageSwiper({ inputCards = [] }) {
+function ImageSwiper({ inputCards = [], swiperStyle = {} }) {
    const [cards, setCards] = useState([]);
 
    const [width, setWidth] = useState(500);
-   const [frontCardWidth, setFCWidth] = useState(
-      (window.innerWidth - width) / 2
-   );
-   const [time, setTime] = useState(0.5);
    const [refresh, setRefresh] = useState(0);
    const [current, setCurrent] = useState(0);
+   const breakPoint = useTheme().size;
 
    useEffect(() => {
       setCards([...inputCards, ...inputCards, ...inputCards]);
@@ -79,14 +81,61 @@ function ImageSwiper({ inputCards = [] }) {
 
    useEffect(() => {
       const elmnt = document.getElementById("CardDisplay");
+      const laptop = window.matchMedia(
+         breakPoint.laptop || "(max-width: 1460px)"
+      );
+      const underLaptop = (e) => {
+         if (e.matches) {
+            setWidth(400);
+         } else {
+            setWidth(500);
+         }
+         elmnt.dispatchEvent("transitionend");
+      };
+      laptop.addEventListener("change", underLaptop);
+      const tabletS = window.matchMedia(
+         breakPoint.tabletS || "(max-width: 1023px)"
+      );
+      const underTabletS = (e) => {
+         if (e.matches) {
+            setWidth(320);
+         } else {
+            setWidth(400);
+         }
+         elmnt.dispatchEvent("transitionend");
+      };
+      tabletS.addEventListener("change", underTabletS);
+      const mobileL = window.matchMedia(
+         breakPoint.mobileL || "(max-width: 770px)"
+      );
+      const underMobileL = (e) => {
+         if (e.matches) {
+            setWidth(280);
+         } else {
+            setWidth(320);
+         }
+         elmnt.dispatchEvent("transitionend");
+      };
+      mobileL.addEventListener("change", underMobileL);
+
+      return () => {
+         laptop.removeEventListener("change", underLaptop);
+         tabletS.removeEventListener("change", underTabletS);
+         mobileL.removeEventListener("change", underMobileL);
+      };
+   }, [breakPoint]);
+
+   useEffect(() => {
+      const elmnt = document.getElementById("CardDisplay");
       const callback = (cur, left) => {
          const lapse = inputCards.length * width;
-         const start = frontCardWidth - lapse;
-         const end = frontCardWidth - lapse * 2 + width;
-         const rest = -((cur - frontCardWidth) % width);
+         const fcwidth = (window.innerWidth - width) / 2;
+         const start = fcwidth - lapse;
+         const end = fcwidth - lapse * 2 + width;
+         const rest = -((cur - fcwidth) % width);
          const wid2 = width / 2;
 
-         setTime(0.2);
+         elmnt.style.transition = "all 0.3s";
          let pullRight = true;
          if (cur <= start + wid2 && cur > end - wid2) {
             if (left < cur && left + wid2 >= cur) {
@@ -106,51 +155,61 @@ function ImageSwiper({ inputCards = [] }) {
       };
       drag(document.getElementById("CardDisplay"), callback);
 
-      const init = () => {
+      const init = (e) => {
+         if (e.propertyName !== "transform") return;
+
          let newLeft =
             parseInt(elmnt.style.transform.replace(/[^-.0-9]/g, "")) -
             parseInt(elmnt.style.left.replace(/[^0-9]/g, ""));
 
          const lapse = inputCards.length * width;
-         const frontFirst = frontCardWidth - lapse + width;
-         const rearLast = frontCardWidth - lapse * 2;
+         const fcwidth = (window.innerWidth - width) / 2;
+         const first = fcwidth - lapse;
+         const last = fcwidth - lapse * 2 + width;
 
-         if (newLeft <= rearLast) {
+         if (newLeft <= last - width / 3) {
             newLeft += lapse;
-         } else if (newLeft >= frontFirst) {
-            newLeft -= +lapse;
+         } else if (newLeft >= first + width / 3) {
+            newLeft -= lapse;
          }
          elmnt.style.left = newLeft + "px";
-         setTime(0);
+         elmnt.style.transition = "all 0s";
          elmnt.style.transform = `translateX(0px)`;
 
          setRefresh((prev) => prev + 1);
-         setCurrent(Math.abs((newLeft + lapse - frontCardWidth) / width));
+         setCurrent(Math.round(Math.abs((newLeft + lapse - fcwidth) / width)));
       };
 
       elmnt.addEventListener("transitionend", init);
       return () => elmnt.removeEventListener("transitionend", init);
-   }, [inputCards.length, frontCardWidth, width]);
+   }, [inputCards.length, width]);
 
    useEffect(() => {
       const id = setInterval(() => {
-         setTime(0.2);
-         document.getElementById(
-            "CardDisplay"
-         ).style.transform = `translateX(-500px)`;
-      }, 5000);
+         const elmnt = document.getElementById("CardDisplay").style;
+         elmnt.transition = "all 0.3s";
+         elmnt.transform = `translateX(-${width}px)`;
+      }, 3000);
       return () => clearInterval(id);
-   }, [refresh]);
+   }, [refresh, width]);
 
    return (
-      <Swiper frontCardWidth={frontCardWidth}>
+      <Swiper
+         frameColor={swiperStyle.frameColor}
+         bgColor={swiperStyle.backgroundColor}
+         width={width}
+      >
          <span className="frame" />
          <CardDisplay
             draggable
             id="CardDisplay"
             num={inputCards.length}
-            time={time}
-            style={{ left: frontCardWidth - inputCards.length * width }}
+            fontColor={swiperStyle.fontColor}
+            width={width}
+            style={{
+               left:
+                  (window.innerWidth - width) / 2 - inputCards.length * width,
+            }}
          >
             {cards.map((card, index) => {
                const className =
@@ -158,12 +217,11 @@ function ImageSwiper({ inputCards = [] }) {
                return (
                   <span key={index} className={className}>
                      <div className="subject">&nbsp;{card.subject}</div>
-                     <img
-                        src={card.image}
-                        width="400px"
-                        alt={`pass img src in ${index}`}
-                     />
-                     <div className="description">&nbsp;{card.description}</div>
+                     <img src={card.image} alt={`pass img src in ${index}`} />
+                     <div className="description">
+                        <br />
+                        &nbsp;{card.description}
+                     </div>
                   </span>
                );
             })}
