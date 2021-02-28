@@ -20,7 +20,7 @@ const Cards = styled.div`
     return props.align || 'space-between'
   }};
 
-  width: ${props => props.width || '100%'};
+  width: 100%;
 
   background: ${props => props.color || 'none'};
   
