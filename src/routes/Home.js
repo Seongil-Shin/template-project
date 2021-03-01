@@ -27,7 +27,7 @@ export default () => (
           </Text>
         </Textarea>
         <Container>
-          <Cards>
+          <Cards color="gray">
             <Card align="center" border="primary">
               <img src={dummy} />
               <Textarea align="center">

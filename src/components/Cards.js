@@ -21,8 +21,10 @@ const Cards = styled.div`
   }};
 
   width: 100%;
+  padding: 16px 0;
+  border-radius: 8px;
 
-  background: ${props => props.color || 'none'};
+  background: ${props => props.theme.color[props.color]};
   
 `
 

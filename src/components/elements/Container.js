@@ -11,11 +11,11 @@ const Container = styled.div`
   flex-direction: column;
 
   width: 100%;
-  & > *:not(:last-child) {
-    margin-bottom: ${props => props.space || "32px"};
-  }
+  padding: 16px 0;
 
-  background: ${props => props.color || 'none'};
+  border-radius: 8px;
+  background: ${props => props.theme.color[props.color]};
+
   
 `
 
