@@ -20,22 +20,35 @@ const Bannerwrapper = styled.div`
   position:relative;
   left:100px;
   float:left;
-  & .slick-dots { //dots style
-    position:absolute;
-    left:${(props) => props.posX-240}px;
-    bottom: 50px;    
-    z-index:20
+`;
+
+const Btns = styled.div`
+  position:absolute;
+  padding: 0 15px 0 15px;
+
+  & > *{
+    position:relative;
+    width:15px;
+    height:15px;
+    float:left;
+    bottom:50px;
+    margin:0 5px 0 5px;
+    border-radius:20px;
+    border:0;
+    outline:0;
+    background-color:${(props) => props.theme.color.highlight};
+    box-shadow:${(props) => props.theme.boxShadow};
+    cursor:pointer
   }
-  & .slick-dots li.slick-active button:before { //active dots style
-    font-size: 15px;
-    opacity: 1;
-    color: ${(props) => props.theme.color.highlight};
-  }
-  & .slick-dots li button:before { //inactive dots style
-    opacity: 0.75;
-    color: ${(props) => props.theme.color.error};
+  & >*.clicked{
+    background-color:${(props) => props.theme.color.primary};
   }
 `;
+
+const Btn = styled.button`
+  
+`;
+
 
 const DivWrapper = styled.div`
   float:left;
@@ -58,47 +71,43 @@ const settings = {
   pauseOnHover: true,
   arrows: false,
   dots: true,
-  customPaging: i => (
+  customPaging: i => ( //dot customizing
     <div
-      style={{
-        width: "30px",
-        color: "blue",
-        border: "1px blue solid"
-      }}
+      id={i}
+      style={{background:"#fff",zIndex:"990",position:"absolute",bottom:"10px"}}
     >
-      &nbsp;
+      &nbsp;{i}
     </div>
   )
 };
 
 function Temp2() {
-  const theme = useTheme();
-  const [posX, setPosX] = useState();
+  const theme = useTheme();  
+  const [btn, setBtn] = useState();
   let target;    
 
-  const getTargetPosition = () => {
-    target = document.getElementById('textBox'); // 요소의 id 값이 target이라 가정
-    const clientRect = target.getBoundingClientRect(); // DomRect 구하기 (각종 좌표값이 들어있는 객체)    
-    const relativeLeft = clientRect.left; // Viewport의 시작지점을 기준으로한 상대좌표 X 값.
-
-    setPosX(relativeLeft)
+  const onClickEvent = (e) => {
+    const dotId = e.target.id.replace("btn","")
+    document.getElementById(dotId).click();
+    for(let i=0;i<target;i++)
+      document.getElementById('btns').childNodes[i].className = "unclicked"
+    e.target.className = "clicked"
   };
 
   useEffect(() => {
-    target = document.getElementById('textBox'); // 요소의 id 값이 target이라 가정
-    const clientRect = target.getBoundingClientRect(); // DomRect 구하기 (각종 좌표값이 들어있는 객체)    
-    const relativeLeft = clientRect.left; // Viewport의 시작지점을 기준으로한 상대좌표 X 값.
-  
-    setPosX(relativeLeft)
+    target = document.getElementsByClassName('slick-dots')[0].childNodes.length
+    for(let i=0;i<target;i++){
+      const id="btn"+i
+      setBtn((prev) => [prev,<button id={id} onClick={onClickEvent}>&nbsp;</button>]);
+    }
     
-    window.addEventListener("resize", getTargetPosition);    
   }, []);
 
   return (
     <>
       <Article>
         <DivWrapper>
-          <Bannerwrapper posX={posX}>
+          <Bannerwrapper>
             <Img src={bg}/>
             <Slider {...settings} >
               <Contents
@@ -171,7 +180,11 @@ function Temp2() {
               theme.color.secondary
             }
           />
+          <Btns id="btns">
+            {btn}
+        </Btns>
         </DivWrapper>
+        
       </Article>
       <MiddleBanner/>
     </>
