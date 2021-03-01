@@ -15,14 +15,13 @@ export default function drag(elmnt, callback) {
    const elementDrag = (e) => {
       e = e || window.event;
       e.preventDefault();
-      console.log("ada");
       elmnt.style.left =
          firstLeft - pos + (e.clientX || e.changedTouches[0].clientX) + "px";
    };
    const closeDragElement = (e) => {
       elmnt.onmouseup = null;
       elmnt.onmousemove = null;
-      console.log(e.changedTouches);
+
       //마우스를 놨을때가 cur
       const cur = firstLeft - pos + (e.clientX || e.changedTouches[0].clientX);
 
