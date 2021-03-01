@@ -5,25 +5,31 @@ export default function drag(elmnt, callback) {
    const dragMouseDown = (e) => {
       e = e || window.event;
       e.preventDefault();
-      pos = e.clientX;
+      pos = e.clientX || e.changedTouches[0].clientX;
       firstLeft = parseInt(elmnt.style.left.replace(/[^-.0-9]/g, ""));
-      document.onmouseup = closeDragElement;
-      document.onmousemove = elementDrag;
+      elmnt.onmouseup = closeDragElement;
+      elmnt.ontouchend = closeDragElement;
+      elmnt.onmousemove = elementDrag;
+      elmnt.ontouchmove = elementDrag;
    };
    const elementDrag = (e) => {
       e = e || window.event;
       e.preventDefault();
-      elmnt.style.left = firstLeft - pos + e.clientX + "px";
+      console.log("ada");
+      elmnt.style.left =
+         firstLeft - pos + (e.clientX || e.changedTouches[0].clientX) + "px";
    };
    const closeDragElement = (e) => {
-      document.onmouseup = null;
-      document.onmousemove = null;
+      elmnt.onmouseup = null;
+      elmnt.onmousemove = null;
+      console.log(e.changedTouches);
       //마우스를 놨을때가 cur
-      const cur = firstLeft - pos + e.clientX;
+      const cur = firstLeft - pos + (e.clientX || e.changedTouches[0].clientX);
 
       callback(cur, firstLeft);
       elmnt.style.left = cur + "px";
    };
 
    elmnt.onmousedown = dragMouseDown;
+   elmnt.ontouchstart = dragMouseDown;
 }

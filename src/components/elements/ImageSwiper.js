@@ -80,48 +80,30 @@ function ImageSwiper({ inputCards = [], swiperStyle = {} }) {
    }, [inputCards]);
 
    useEffect(() => {
-      const elmnt = document.getElementById("CardDisplay");
-      const laptop = window.matchMedia(
-         breakPoint.laptop || "(max-width: 1460px)"
-      );
-      const underLaptop = (e) => {
-         if (e.matches) {
+      const mediase = [
+         window.matchMedia(breakPoint.mobileL || "(max-width: 770px)"),
+         window.matchMedia(breakPoint.tabletS || "(max-width: 1023px)"),
+         window.matchMedia(breakPoint.laptop || "(max-width: 1460px)"),
+      ];
+      const handle = () => {
+         if (mediase[0].matches) {
+            setWidth(280);
+         } else if (mediase[1].matches) {
+            setWidth(320);
+         } else if (mediase[2].matches) {
             setWidth(400);
          } else {
             setWidth(500);
          }
-         elmnt.dispatchEvent("transitionend");
       };
-      laptop.addEventListener("change", underLaptop);
-      const tabletS = window.matchMedia(
-         breakPoint.tabletS || "(max-width: 1023px)"
-      );
-      const underTabletS = (e) => {
-         if (e.matches) {
-            setWidth(320);
-         } else {
-            setWidth(400);
-         }
-         elmnt.dispatchEvent("transitionend");
-      };
-      tabletS.addEventListener("change", underTabletS);
-      const mobileL = window.matchMedia(
-         breakPoint.mobileL || "(max-width: 770px)"
-      );
-      const underMobileL = (e) => {
-         if (e.matches) {
-            setWidth(280);
-         } else {
-            setWidth(320);
-         }
-         elmnt.dispatchEvent("transitionend");
-      };
-      mobileL.addEventListener("change", underMobileL);
-
+      for (const media of mediase) {
+         media.addEventListener("change", handle);
+      }
+      handle();
       return () => {
-         laptop.removeEventListener("change", underLaptop);
-         tabletS.removeEventListener("change", underTabletS);
-         mobileL.removeEventListener("change", underMobileL);
+         for (const media of mediase) {
+            media.removeEventListener("change", handle);
+         }
       };
    }, [breakPoint]);
 
@@ -157,10 +139,9 @@ function ImageSwiper({ inputCards = [], swiperStyle = {} }) {
 
       const init = (e) => {
          if (e.propertyName !== "transform") return;
-
          let newLeft =
-            parseInt(elmnt.style.transform.replace(/[^-.0-9]/g, "")) -
-            parseInt(elmnt.style.left.replace(/[^0-9]/g, ""));
+            parseInt(elmnt.style.transform.replace(/[^-.0-9]/g, "")) +
+            parseInt(elmnt.style.left.replace(/[^-.0-9]/g, ""));
 
          const lapse = inputCards.length * width;
          const fcwidth = (window.innerWidth - width) / 2;
