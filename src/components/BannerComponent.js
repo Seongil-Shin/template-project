@@ -86,7 +86,7 @@ const Subtitle = styled.h3`
   font-size: ${(props) => (props.fontSize === "big" ? "48px" : "24px")};
   color: ${(props) => props.color};
   text-align: ${(props) => props.align};
-
+  line-height:130%;
   @media ${(props) => props.theme.size.tabletL} {
     font-size: ${(props) => (props.fontSize === "big" ? "40px" : "24px")};
   }
@@ -204,7 +204,7 @@ function BannerContent(props) {
             <Subtitle
               fontSize={types.fontSize}
               align={types.align}
-              color={props.colors?.split(",")[1]}
+              color={props.colors?.split(",")[1]}              
             >
               {props.subTitle}
             </Subtitle>

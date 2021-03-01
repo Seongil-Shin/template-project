@@ -8,7 +8,7 @@ function Footer() {
 
   return (
     <>
-      푸터
+      임시푸터 ㅇㅇㅇㅇㅇ
     </>
   );
 }
