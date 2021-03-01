@@ -25,7 +25,6 @@ const Cards = styled.div`
   border-radius: 8px;
 
   background: ${props => props.theme.color[props.color]};
-  
 `
 
 export default Cards

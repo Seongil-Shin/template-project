@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 /*
   props
     align
+    verticalAlign
     color
     border
     space
@@ -12,6 +13,13 @@ import styled, { css } from 'styled-components'
 const Card = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: ${props => {
+    if (props.verticalAlign === 'top')
+      return 'flex-start'
+    else if (props.verticalAlign === 'bottom')
+      return 'flex-end'
+    return props.verticalAlign || 'flex-start'
+  }};
   align-items: ${props => {
     if (props.align === 'left')
       return 'flex-start'
@@ -27,7 +35,7 @@ const Card = styled.div`
   padding-top: 32px;
   padding-bottom: 32px;
 
-  background: ${props => props.color || 'none'};
+  background: ${props => props.theme.color[props.color]};
   ${props => props.border &&
     css`
       border: 1px solid ${props => props.theme.color[props.border]};
@@ -46,24 +54,25 @@ const Card = styled.div`
 
   /* Card가 두개일 때 */
   &:first-child:nth-last-child(2),
-  &:first-child:nth-last-child(2) ~ & {
+  &:first-child:nth-last-child(2) ~ * {
     padding-left: 64px;
     padding-right: 64px;
   }
 
   /* Card가 세개일 때 */
   &:first-child:nth-last-child(3),
-  &:first-child:nth-last-child(3) ~ & {
+  &:first-child:nth-last-child(3) ~ * {
     padding-left: 32px;
     padding-right: 32px;
   }
 
   /* Card가 네개일 때 */
   &:first-child:nth-last-child(4),
-  &:first-child:nth-last-child(4) ~ & {
+  &:first-child:nth-last-child(4) ~ * {
     padding-left: 16px;
     padding-right: 16px;
   }
+
 `
 
 export default Card
