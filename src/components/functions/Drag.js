@@ -5,7 +5,7 @@ export default function drag(elmnt, callback) {
    const dragMouseDown = (e) => {
       e = e || window.event;
       e.preventDefault();
-      pos = e.clientX || e.changedTouches[0].clientX;
+      pos = e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || 0;
       firstLeft = parseInt(elmnt.style.left.replace(/[^-.0-9]/g, ""));
       elmnt.onmouseup = closeDragElement;
       elmnt.ontouchend = closeDragElement;
@@ -16,14 +16,20 @@ export default function drag(elmnt, callback) {
       e = e || window.event;
       e.preventDefault();
       elmnt.style.left =
-         firstLeft - pos + (e.clientX || e.changedTouches[0].clientX) + "px";
+         firstLeft -
+         pos +
+         (e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || 0) +
+         "px";
    };
    const closeDragElement = (e) => {
       elmnt.onmouseup = null;
       elmnt.onmousemove = null;
 
       //마우스를 놨을때가 cur
-      const cur = firstLeft - pos + (e.clientX || e.changedTouches[0].clientX);
+      const cur =
+         firstLeft -
+         pos +
+         (e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || 0);
 
       callback(cur, firstLeft);
       elmnt.style.left = cur + "px";
