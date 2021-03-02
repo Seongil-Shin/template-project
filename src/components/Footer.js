@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled, { useTheme } from "styled-components";
-import LinearTextGradient from "react-native-text-gradient";
+
 import TwitterIcon from "@material-ui/icons/Twitter";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import FacebookIcon from "@material-ui/icons/Facebook";
@@ -49,6 +49,8 @@ const IconDiv = styled.div`
     color: ${(props) =>
       props.icon === "tw"
         ? "#00ACEE"
+        : props.icon === "ig" 
+        ? "#C13584"
         : props.icon === "fb"
         ? "#3b5998"
         : "#211f1f"};
@@ -96,7 +98,7 @@ function Footer() {
           <TwitterIcon />
         </IconDiv>
         <IconDiv icon="ig">
-          <InstagramIcon id="ig" />
+          <InstagramIcon/>
         </IconDiv>
         <IconDiv icon="fb">
           <FacebookIcon />
@@ -132,16 +134,6 @@ function Footer() {
           <span>@2021 izone permanent</span>
         </TextDiv>
       </FooterLine>
-      <LinearTextGradient
-        style={{ fontWeight: "bold", fontSize: 72 }}
-        locations={[0, 1]}
-        colors={["red", "blue"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-      >
-        THIS IS TEXT GRADIENT
-      </LinearTextGradient>
-      ;
     </FooterWrapper>
   );
 }
