@@ -8,7 +8,7 @@ import styled, { css } from 'styled-components'
 */
 
 //TODO: 반응형 추가 후 수치들 theme로 조정
-const Cards = styled.div`
+const Cards = styled.ul`
   display: flex;
   justify-content: ${props => {
     if (props.align === 'left')
