@@ -31,8 +31,10 @@ export default function drag(elmnt, callback) {
          pos +
          (e.clientX || (e.changedTouches && e.changedTouches[0].clientX) || 0);
 
-      callback(cur, firstLeft);
-      elmnt.style.left = cur + "px";
+      if (firstLeft !== cur) {
+         elmnt.style.left = cur + "px";
+         callback(cur, firstLeft);
+      }
    };
 
    elmnt.onmousedown = dragMouseDown;
