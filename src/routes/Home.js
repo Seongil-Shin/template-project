@@ -10,14 +10,13 @@ import Text from "../components/elements/Text";
 import Card from "../components/Card";
 
 import dummy from "../assets/images/dummy.png";
-import Header from "../components/Header";
 import Image from "../components/elements/Image";
 import Container from "../components/elements/Container";
 import Cards from "../components/Cards";
 
 import dummy2 from "../assets/images/dummy2.png";
 
-export default () => (
+const Home = () => (
    <>
       <Banner />
       <Wrapper>
@@ -301,3 +300,4 @@ export default () => (
       <MiddleBanner />
    </>
 );
+export default Home;
