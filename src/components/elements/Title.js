@@ -12,6 +12,7 @@ import styled from 'styled-components'
 
 //TODO: 반응형 추가 후 수치들 theme로 조정
 const Title = styled.h2`
+  width: 100%;
   text-align: ${props => props.align || "justify"};
   font-size: ${props => {
       if (props.size === 'card')

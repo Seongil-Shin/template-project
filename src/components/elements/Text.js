@@ -14,6 +14,7 @@ import styled from 'styled-components'
 //TODO: 반응형 추가 후 수치들 theme로 조정
 //TODO: Card에선 16px, Title/Desc 조합일 때는 20px
 const Text = styled.p`
+  width: 100%;
   text-align: ${props => props.align || "justify"};
   font-size: ${props => {
       if (props.size === 'desc')

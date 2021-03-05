@@ -11,12 +11,17 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
 
+  box-sizing: border-box;
   width: 1200px;
   margin: 0 auto;
-  padding: 64px;
+  padding: 0 64px;
 
   background: ${({ theme }) => theme.color.white};
   border-radius: 32px;
+
+  & > * {
+    margin: 64px 0;
+  }
 `
 
 export default Wrapper
