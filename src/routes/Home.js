@@ -1,5 +1,6 @@
 import React from "react";
 import Banner from "../components/Banner";
+import MiddleBanner from "../components/MiddleBanner";
 import Wrapper from "../components/elements/Wrapper";
 import Textarea from "../components/Textarea";
 import Title from "../components/elements/Title";
@@ -30,5 +31,6 @@ export default () => (
             </Textarea>
          </Card>
       </Wrapper>
+      <MiddleBanner />
    </>
 );

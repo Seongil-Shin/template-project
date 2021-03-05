@@ -18,7 +18,7 @@ const theme = {
     white: "#FCFDFF",
     gray: "#B8C7E2",
     error: "#DE4D6C",
-    highlight: "#7F7FD5",
+    highlight: "#7F7FD5",    
     gradationLeft: "#7F7FD5",
     gradationCenter: "#86A8E7",
     gradationRight: "#91EAE4",
