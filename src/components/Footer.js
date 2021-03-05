@@ -8,9 +8,9 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 
 const FooterWrapper = styled.div`
   width: 100%;
-  height: 200px;
+  height: 180px;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.color.primary};
+  background-color: ${(props) => props.theme.color.gray};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -75,7 +75,7 @@ const TextDiv = styled.div`
     font-size: ${(props) => (props.size === "small" ? props.size : "15px")};
     color: ${(props) =>
       props.size === "small"
-        ? props.theme.color.gray
+        ? props.theme.color.primary
         : props.theme.color.white};
   }
   & a {
