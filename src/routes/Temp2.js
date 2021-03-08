@@ -12,6 +12,7 @@ import bg from "../img/main_input_bg.png";
 import $ from "jquery";
 window.$ = $;
 
+let data;
 const BANNER_HEIGHT = "460px";
 
 const Article = styled.div`
@@ -79,6 +80,7 @@ const settings = {
 function Temp2() {
    const theme = useTheme();
    const [posX, setPosX] = useState();
+   const [test, setTest] = useState();
    let target;
    let target2;
 
@@ -151,6 +153,16 @@ function Temp2() {
       const observe = document.getElementsByClassName("slick-track")[0];
       observer.observe(observe, { attributes: true });
 
+      (async () => {
+         const url = '/users/api/test/';
+         const response =  await fetch(url);
+         data = await response.json();         
+         
+       })()
+       .then(()=>{
+         setTest(data)
+       })
+
       window.addEventListener("resize", getTargetPosition);
    }, []);
 
@@ -220,6 +232,7 @@ function Temp2() {
             </DivWrapper>
          </Article>
          <MiddleBanner />
+         {test?.test}
       </>
    );
 }
