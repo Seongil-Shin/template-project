@@ -154,7 +154,7 @@ function Temp2() {
       observer.observe(observe, { attributes: true });
 
       (async () => {
-         const url = '/api/test/';
+         const url = '/users/api/test/';
          const response =  await fetch(url);
          data = await response.json();         
          

@@ -2,10 +2,8 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.get("/api/test", (req, res) => {
-    console.log('test')
-  
-    res.send({test:'test'});
-});
+var userRouter = require('./routes/users');
+
+app.use('/users',userRouter);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
