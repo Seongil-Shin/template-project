@@ -232,7 +232,9 @@ function Temp2() {
             </DivWrapper>
          </Article>
          <MiddleBanner />
-         {test?.test}
+         {test?.map((c,i) => {
+            return c.test
+         })}
       </>
    );
 }
