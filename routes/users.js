@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
 });
 
 router.get('/api/test', function(req, res, next) {
-  let sql = "SELECT * FROM temp ";
+  let sql = "SELECT * FROM temp";
   let params = [];
 
   connection.query(sql, params, (err, rows, fields) => {
@@ -24,5 +24,15 @@ router.get('/api/test', function(req, res, next) {
   });
 });  
    
+router.post('/api/test', function(req, res, next) {
+  let sql = "SELECT * FROM temp";
+  let params = [];
+
+  connection.query(sql, params, (err, rows, fields) => {
+    console.log(rows)
+    res.send(rows);
+  });
+});
+
 module.exports = router;
   
