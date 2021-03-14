@@ -72,29 +72,29 @@ export default function SignIn({ history }) {
 
    const onSubmit = async (e) => {
       e.preventDefault();
-      try {
-         await axios
-            .post("/users/api/login", {
-               uid: `${id}`,
-               pw: `${password}`,
-            })
-            .then((res) => {
-               if (res.data.idNotMatch) {
-                  setIdNotMatch(true);
-                  setPwNotMatch(false);
-               } else if (res.data.match) {
-                  history.goBack();
-               } else if (res.data.pwNotMatch) {
-                  setPwNotMatch(true);
-                  setIdNotMatch(false);
-               } else {
-                  alert("알 수 없는 에러가 발생했습니다. 다시 시도해주세요.");
-               }
-            });
-      } catch (e) {
-         console.log(e);
-      }
+      await axios
+         .post("/users/api/login", {
+            uid: `${id}`,
+            pw: `${password}`,
+         })
+         .then((res) => {
+            if (res.data.idNotMatch) {
+               setIdNotMatch(true);
+               setPwNotMatch(false);
+            } else if (res.data.authenticated) {
+               history.goBack();
+            } else if (res.data.pwNotMatch) {
+               setPwNotMatch(true);
+               setIdNotMatch(false);
+            }
+         })
+         .catch(() => {
+            alert(
+               "데이터베이스에 문제가 발생했습니다. 잠시 후 다시 시도해주세요."
+            );
+         });
    };
+
    return (
       <LoginContainer>
          <Container component="main" maxWidth="xs">
