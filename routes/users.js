@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../dbconnection");
 const crypto = require("crypto");
 const flash = require("connect-flash");
+const { request } = require("express");
 router.use(flash());
 
 const passport = require("../lib/passport")(router);
@@ -11,15 +12,13 @@ const passport = require("../lib/passport")(router);
 router.post(
    "/api/login",
    passport.authenticate("local", {
-      successRedirect: "/users/api/login-success",
       failureRedirect: "/users/api/login-fail",
       failureFlash: true,
-   })
+   }),
+   (req, res) => {
+      res.send({ authenticated: true });
+   }
 );
-
-router.get("/api/login-success", (req, res) => {
-   res.send({ authenticated: true });
-});
 
 router.get("/api/login-fail", (req, res) => {
    const message = req.flash();
@@ -35,6 +34,7 @@ router.post("/api/join", (req, res) => {
       .createHmac("sha256", process.env.SHA256_KEY)
       .update(req.body.pw)
       .digest("hex");
+
    db.query(
       `INSERT INTO auth (UID, NAME, PASSWORD) VALUES ("${req.body.uid}", "${req.body.name}", "${password}");`,
       (err, ok) => {
@@ -51,6 +51,9 @@ router.post("/api/join", (req, res) => {
    );
 });
 
-//router.post("/api/logout", (req, res) => {});
+router.post("/api/logout", (req, res) => {
+   request.logout();
+   res.send("logout");
+});
 
 module.exports = router;

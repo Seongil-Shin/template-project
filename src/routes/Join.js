@@ -18,7 +18,7 @@ const JoinContainer = styled.div`
    height: 80vh;
 `;
 const ErrorMessege = styled.div`
-   padding: 5px 0px 20px 10px;
+   padding-left: 10px;
    color: red;
 `;
 function Copyright() {
@@ -59,38 +59,60 @@ export default function Join({ history }) {
    const [name, setName] = useState("");
    const [id, setId] = useState("");
    const [password, setPassword] = useState("");
-   const [isDupId, setIsDupId] = useState(false);
+   const [idErrMsg, setIdErrMsg] = useState("");
+   const [nameErrMsg, setNameErrMsg] = useState("");
 
    const onIdChange = (e) => {
-      setId(e.target.value);
+      const {
+         target: { value },
+      } = e;
+      if (/\W/.exec(value)) {
+         setIdErrMsg("아이디는 영소대문자 또는 숫자의 조합으로만 가능합니다.");
+      } else {
+         if (value.length > 20) {
+            setIdErrMsg("아이디는 최대 20자까지 가능합니다.");
+         } else {
+            setIdErrMsg("");
+            setId(value);
+         }
+      }
    };
    const onPasswordChange = (e) => {
       setPassword(e.target.value);
    };
    const onNameChange = (e) => {
-      setName(e.target.value);
+      const {
+         target: { value },
+      } = e;
+
+      if (value.length > 20) {
+         setNameErrMsg("이름은 최대 20자까지 가능합니다.");
+      } else {
+         setNameErrMsg("");
+         setName(value);
+      }
    };
    const onSubmit = async (e) => {
       e.preventDefault();
-      try {
-         await axios
-            .post("/users/api/join", {
-               name: `${name}`,
-               uid: `${id}`,
-               pw: `${password}`,
-            })
-            .then((res) => {
-               if (res.data.isJoined) {
-                  history.push("/login");
-               } else if (res.data.dupId) {
-                  setIsDupId(true);
-               } else {
-                  alert("오류가 발생했습니다. 다시 시도해주세요.");
-               }
-            });
-      } catch (e) {
-         console.log(e);
-      }
+
+      await axios
+         .post("/users/api/join", {
+            name: `${name}`,
+            uid: `${id}`,
+            pw: `${password}`,
+         })
+         .then((res) => {
+            if (res.data.isJoined) {
+               history.push("/login");
+            } else if (res.data.dupId) {
+               setIdErrMsg("이미 사용 중인 아이디입니다.");
+            } else {
+               alert("오류가 발생했습니다. 다시 시도해주세요.");
+            }
+         })
+         .catch((e) => {
+            alert("오류가 발생했습니다. 다시 시도해주세요.");
+         });
    };
 
    return (
@@ -116,8 +138,10 @@ export default function Join({ history }) {
                            name="name"
                            autoFocus
                            onChange={onNameChange}
+                           value={name}
                         />
                      </Grid>
+                     <ErrorMessege>{nameErrMsg}</ErrorMessege>
                      <Grid item xs={12}>
                         <TextField
                            variant="outlined"
@@ -127,11 +151,10 @@ export default function Join({ history }) {
                            label="아이디"
                            name="id"
                            onChange={onIdChange}
+                           value={id}
                         />
                      </Grid>
-                     {isDupId && (
-                        <ErrorMessege>이미 사용중인 아이디입니다.</ErrorMessege>
-                     )}
+                     <ErrorMessege>{idErrMsg}</ErrorMessege>
                      <Grid item xs={12}>
                         <TextField
                            variant="outlined"

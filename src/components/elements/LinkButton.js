@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 
@@ -62,25 +62,41 @@ const StyledLink = styled.span`
 //name : 만약 상위에서 className으로 스타일을 지정하고 싶으면 name을 넘김
 
 const LinkButton = ({
-   to = "/",
-   param = "",
-   query = "",
-   data,
+   path = { to: "/", param: "", query: "" },
    isImage = false,
    content,
    buttonStyle = {},
    name = "",
 }) => {
-   return (
-      <Link to={{ pathname: to + param, search: query, state: data }}>
-         <StyledLink {...buttonStyle} className={name}>
+   const [button, setButton] = useState();
+   useEffect(() => {
+      setButton(
+         <StyledLink
+            {...buttonStyle}
+            className={name}
+            onClick={() => path.callback}
+         >
             {isImage ? (
                <img src={content} alt="pass a src as content=[src]" />
             ) : (
-               <span>{content || to}</span>
+               <span>{content || path.to}</span>
             )}
          </StyledLink>
+      );
+   }, [buttonStyle, name, isImage, content, path.to, path]);
+
+   return path.to ? (
+      <Link
+         to={{
+            pathname: path.to + (path.param || ""),
+            search: path.query || "",
+            state: path.data || "",
+         }}
+      >
+         {button}
       </Link>
+   ) : (
+      <>{button}</>
    );
 };
 

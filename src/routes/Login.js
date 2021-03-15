@@ -14,13 +14,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import styled from "styled-components";
 import axios from "axios";
+import { connect } from "react-redux";
+import { logined } from "../stores/loginState";
 
 const LoginContainer = styled.div`
    padding: 70px 0px;
    height: 80vh;
 `;
 const ErrorMessege = styled.div`
-   padding: 5px 0px 20px 10px;
+   padding-left: 10px;
    color: red;
 `;
 function Copyright() {
@@ -56,20 +58,31 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
-export default function SignIn({ history }) {
+function SignIn({ history, onLogined }) {
    const classes = useStyles();
    const [id, setId] = useState("");
    const [password, setPassword] = useState("");
-   const [idNotMatch, setIdNotMatch] = useState(false);
    const [pwNotMatch, setPwNotMatch] = useState(false);
+   const [idErrMsg, setIdErrMsg] = useState("");
 
    const onIdChange = (e) => {
-      setId(e.target.value);
+      const {
+         target: { value },
+      } = e;
+      if (/\W/.exec(value)) {
+         setIdErrMsg("아이디는 영소대문자 또는 숫자의 조합으로만 가능합니다.");
+      } else {
+         if (value.length > 20) {
+            setIdErrMsg("아이디는 최대 20자까지 가능합니다.");
+         } else {
+            setIdErrMsg("");
+            setId(value);
+         }
+      }
    };
    const onPasswordChange = (e) => {
       setPassword(e.target.value);
    };
-
    const onSubmit = async (e) => {
       e.preventDefault();
       await axios
@@ -79,13 +92,14 @@ export default function SignIn({ history }) {
          })
          .then((res) => {
             if (res.data.idNotMatch) {
-               setIdNotMatch(true);
+               setIdErrMsg("존재하지 않은 아이디입니다.");
                setPwNotMatch(false);
             } else if (res.data.authenticated) {
+               onLogined();
                history.goBack();
             } else if (res.data.pwNotMatch) {
                setPwNotMatch(true);
-               setIdNotMatch(false);
+               setIdErrMsg("");
             }
          })
          .catch(() => {
@@ -119,9 +133,7 @@ export default function SignIn({ history }) {
                      value={id}
                      autoFocus
                   />
-                  {idNotMatch && (
-                     <ErrorMessege>일치하는 아이디가 없습니다.</ErrorMessege>
-                  )}
+                  <ErrorMessege>{idErrMsg}</ErrorMessege>
                   <TextField
                      variant="outlined"
                      margin="normal"
@@ -172,3 +184,11 @@ export default function SignIn({ history }) {
       </LoginContainer>
    );
 }
+
+function mapDispatchToProps(dispatch, ownProps) {
+   return {
+      onLogined: () => dispatch(logined()),
+   };
+}
+
+export default connect(null, mapDispatchToProps)(SignIn);
