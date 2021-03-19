@@ -96,7 +96,11 @@ function SignIn({ history, onLogined }) {
                setPwNotMatch(false);
             } else if (res.data.authenticated) {
                onLogined();
-               history.goBack();
+               if (history.location.state.prev !== "/join") {
+                  history.goBack();
+               } else {
+                  history.push("/");
+               }
             } else if (res.data.pwNotMatch) {
                setPwNotMatch(true);
                setIdErrMsg("");
@@ -185,7 +189,7 @@ function SignIn({ history, onLogined }) {
    );
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch) {
    return {
       onLogined: () => dispatch(logined()),
    };

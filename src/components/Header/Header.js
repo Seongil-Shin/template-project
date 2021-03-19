@@ -1,11 +1,10 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { logined } from "../../stores/loginState";
+import { logout } from "../../stores/loginState";
 import Logout from "../functions/Logout";
 import HeaderComponent from "./HeaderComponent";
 
-function Header({ isLogined }) {
+function Header({ isLogined, onLogout }) {
    const [links, setLinks] = useState([
       {
          to: "/",
@@ -50,22 +49,8 @@ function Header({ isLogined }) {
          content: "Join",
       },
    ]);
+
    useEffect(() => {
-      const logout = async (onLogined = "123") => {
-         console.log(123123);
-         /*
-         await axios
-            .post("/users/api/logout")
-            .then((res) => {
-               console.log(res);
-            })
-            .catch(() => {
-               alert(
-                  "데이터베이스에 문제가 발생했습니다. 잠시 후 다시 시도해주세요."
-               );
-            });
-            */
-      };
       const changeLastTwo = (linkTo1, linkTo2, content1, content2) => {
          setLinks((prev) =>
             prev.map((link, index) => {
@@ -73,11 +58,12 @@ function Header({ isLogined }) {
                   link.to = linkTo1;
                } else if (index === prev.length - 1) {
                   link.to = linkTo2;
-                  link.callback = function () {
-                     console.log();
-                  };
+                  if (linkTo2 === "") {
+                     link.callback = Logout;
+                  } else {
+                     link.callback = () => {};
+                  }
                }
-               logout();
                return link;
             })
          );
@@ -98,8 +84,11 @@ function Header({ isLogined }) {
       } else {
          changeLastTwo("/login", "/join", "login", "Join");
       }
-   }, [isLogined]);
-   return <HeaderComponent link={links} content={contents} />;
+      document.addEventListener("logout", onLogout);
+      return () => document.removeEventListener("logout", onLogout);
+   }, [isLogined, onLogout]);
+
+   return <HeaderComponent id="Header" link={links} content={contents} />;
 }
 
 function mapStateToProps(state) {
@@ -107,7 +96,7 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
    return {
-      onLogined: () => dispatch(logined()),
+      onLogout: () => dispatch(logout()),
    };
 }
 

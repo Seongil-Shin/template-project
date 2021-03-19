@@ -3,7 +3,6 @@ const router = express.Router();
 const db = require("../dbconnection");
 const crypto = require("crypto");
 const flash = require("connect-flash");
-const { request } = require("express");
 router.use(flash());
 
 const passport = require("../lib/passport")(router);
@@ -52,8 +51,8 @@ router.post("/api/join", (req, res) => {
 });
 
 router.post("/api/logout", (req, res) => {
-   request.logout();
-   res.send("logout");
+   req.logout();
+   res.send({ logout: true });
 });
 
 module.exports = router;

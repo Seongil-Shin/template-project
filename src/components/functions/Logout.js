@@ -1,14 +1,14 @@
 import axios from "axios";
-import { connect } from "react-redux";
-import { logined } from "../../stores/loginState";
 
-const Logout = async (onLogined) => {
-   console.log(123123);
-
+const Logout = async () => {
+   console.log("yes im on");
    await axios
       .post("/users/api/logout")
       .then((res) => {
-         console.log(res);
+         if (res.data.logout) {
+            const event = new Event("logout");
+            document.dispatchEvent(event);
+         }
       })
       .catch(() => {
          alert(
@@ -17,10 +17,4 @@ const Logout = async (onLogined) => {
       });
 };
 
-function mapDispatchToProps(dispatch) {
-   return {
-      onLogined: () => dispatch(logined()),
-   };
-}
-
-export default connect(null, mapDispatchToProps)(Logout);
+export default Logout;

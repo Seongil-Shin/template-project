@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 const StyledLink = styled.span`
@@ -40,6 +40,10 @@ const StyledLink = styled.span`
          (theme && theme.color && theme.color.title) ||
          "#1A4188"};
       `}
+
+      &:hover {
+      cursor: pointer;
+   }
 `;
 
 //to : url, param : 파라미터, query : 쿼리, data : 넘겨줄 데이터.
@@ -62,20 +66,17 @@ const StyledLink = styled.span`
 //name : 만약 상위에서 className으로 스타일을 지정하고 싶으면 name을 넘김
 
 const LinkButton = ({
-   path = { to: "/", param: "", query: "" },
+   path = { to: "/", param: "", query: "", callback: () => {} },
    isImage = false,
    content,
    buttonStyle = {},
    name = "",
 }) => {
+   const location = useLocation();
    const [button, setButton] = useState();
    useEffect(() => {
       setButton(
-         <StyledLink
-            {...buttonStyle}
-            className={name}
-            onClick={() => path.callback}
-         >
+         <StyledLink {...buttonStyle} className={name} onClick={path.callback}>
             {isImage ? (
                <img src={content} alt="pass a src as content=[src]" />
             ) : (
@@ -90,7 +91,7 @@ const LinkButton = ({
          to={{
             pathname: path.to + (path.param || ""),
             search: path.query || "",
-            state: path.data || "",
+            state: { ...path.data, prev: location.pathname },
          }}
       >
          {button}
