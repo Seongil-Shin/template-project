@@ -24,7 +24,6 @@ router.post(
       failureFlash: true,
    }),
    (req, res) => {
-      console.log(1231233123123123);
       if (!req.body.rememberMe) {
          return res.send({ authenticated: true });
       }
@@ -38,14 +37,14 @@ router.post(
    }
 );
 router.get("/api/login-fail", (req, res) => {
-   console.log("failed");
    var message = req.flash();
-   if (message.error[0] === "Invalid id") {
+   if (!message.error) {
+      return res.send({ pushFrequent: true });
+   } else if (message.error[0] === "Invalid id") {
       return res.send({ idNotMatch: true });
    } else if (message.error[0] === "Invalid pw") {
       return res.send({ pwNotMatch: true });
    }
-   console.log("1233123");
 });
 
 router.get("/api/remember-me", (req, res) => {

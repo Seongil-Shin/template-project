@@ -63,11 +63,11 @@ function SignIn({ history, onLogined }) {
    const classes = useStyles();
    const [id, setId] = useState("");
    const [password, setPassword] = useState("");
-   const [pwNotMatch, setPwNotMatch] = useState(false);
+   const [pwErrMsg, setPwErrMsg] = useState("");
    const [idErrMsg, setIdErrMsg] = useState("");
    const [rememberMe, setRememberMe] = useState(false);
    const [rememberId, setRememberId] = useState(false);
-   const [cookies, setCookies] = useCookies(["uid"]);
+   const [cookies, setCookies, removeCookies] = useCookies(["uid"]);
 
    useEffect(() => {
       if (cookies.uid) {
@@ -75,8 +75,6 @@ function SignIn({ history, onLogined }) {
          setRememberId(true);
       }
    }, [cookies.uid]);
-
-   console.log(rememberId);
 
    const onIdChange = (e) => {
       const {
@@ -107,14 +105,15 @@ function SignIn({ history, onLogined }) {
                rememberMe: rememberMe,
             })
             .then((res) => {
-               console.log(res);
                if (res.data.idNotMatch) {
                   setIdErrMsg("존재하지 않은 아이디입니다.");
-                  setPwNotMatch(false);
+                  setPwErrMsg("");
                } else if (res.data.authenticated) {
                   onLogined();
                   if (rememberId) {
                      setCookies("uid", id, { maxAge: 123154131 });
+                  } else {
+                     removeCookies("uid");
                   }
                   if (
                      history.location.state.prev &&
@@ -125,7 +124,10 @@ function SignIn({ history, onLogined }) {
                      history.push("/");
                   }
                } else if (res.data.pwNotMatch) {
-                  setPwNotMatch(true);
+                  setPwErrMsg("비밀번호가 일치하지 않습니다.");
+                  setIdErrMsg("");
+               } else {
+                  setPwErrMsg("아이디 또는 비밀번호가 일치하지 않습니다.");
                   setIdErrMsg("");
                }
             })
@@ -177,9 +179,7 @@ function SignIn({ history, onLogined }) {
                      onChange={onPasswordChange}
                      autoComplete="current-password"
                   />
-                  {pwNotMatch && (
-                     <ErrorMessege>비밀번호가 일치하지 않습니다.</ErrorMessege>
-                  )}
+                  <ErrorMessege>{pwErrMsg}</ErrorMessege>
                   <FormControlLabel
                      control={<Checkbox value={rememberId} color="primary" />}
                      label="아이디 저장"
