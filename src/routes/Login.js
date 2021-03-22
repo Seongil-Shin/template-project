@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -16,6 +16,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { connect } from "react-redux";
 import { logined } from "../stores/loginState";
+import { useCookies } from "react-cookie";
 
 const LoginContainer = styled.div`
    padding: 70px 0px;
@@ -64,6 +65,18 @@ function SignIn({ history, onLogined }) {
    const [password, setPassword] = useState("");
    const [pwNotMatch, setPwNotMatch] = useState(false);
    const [idErrMsg, setIdErrMsg] = useState("");
+   const [rememberMe, setRememberMe] = useState(false);
+   const [rememberId, setRememberId] = useState(false);
+   const [cookies, setCookies] = useCookies(["uid"]);
+
+   useEffect(() => {
+      if (cookies.uid) {
+         setId(cookies.uid);
+         setRememberId(true);
+      }
+   }, [cookies.uid]);
+
+   console.log(rememberId);
 
    const onIdChange = (e) => {
       const {
@@ -83,34 +96,47 @@ function SignIn({ history, onLogined }) {
    const onPasswordChange = (e) => {
       setPassword(e.target.value);
    };
-   const onSubmit = async (e) => {
+   const onSubmit = (e) => {
       e.preventDefault();
-      await axios
-         .post("/users/api/login", {
-            uid: `${id}`,
-            pw: `${password}`,
-         })
-         .then((res) => {
-            if (res.data.idNotMatch) {
-               setIdErrMsg("존재하지 않은 아이디입니다.");
-               setPwNotMatch(false);
-            } else if (res.data.authenticated) {
-               onLogined();
-               if (history.location.state.prev !== "/join") {
-                  history.goBack();
-               } else {
-                  history.push("/");
+
+      const login = async () => {
+         await axios
+            .post("/users/api/login", {
+               uid: `${id}`,
+               pw: `${password}`,
+               rememberMe: rememberMe,
+            })
+            .then((res) => {
+               console.log(res);
+               if (res.data.idNotMatch) {
+                  setIdErrMsg("존재하지 않은 아이디입니다.");
+                  setPwNotMatch(false);
+               } else if (res.data.authenticated) {
+                  onLogined();
+                  if (rememberId) {
+                     setCookies("uid", id, { maxAge: 123154131 });
+                  }
+                  if (
+                     history.location.state.prev &&
+                     history.location.state.prev !== "/join"
+                  ) {
+                     history.goBack();
+                  } else {
+                     history.push("/");
+                  }
+               } else if (res.data.pwNotMatch) {
+                  setPwNotMatch(true);
+                  setIdErrMsg("");
                }
-            } else if (res.data.pwNotMatch) {
-               setPwNotMatch(true);
-               setIdErrMsg("");
-            }
-         })
-         .catch(() => {
-            alert(
-               "데이터베이스에 문제가 발생했습니다. 잠시 후 다시 시도해주세요."
-            );
-         });
+            })
+            .catch((err) => {
+               console.log(err);
+               alert(
+                  "데이터베이스에 문제가 발생했습니다. 잠시 후 다시 시도해주세요."
+               );
+            });
+      };
+      login();
    };
 
    return (
@@ -155,8 +181,15 @@ function SignIn({ history, onLogined }) {
                      <ErrorMessege>비밀번호가 일치하지 않습니다.</ErrorMessege>
                   )}
                   <FormControlLabel
-                     control={<Checkbox value="remember" color="primary" />}
+                     control={<Checkbox value={rememberId} color="primary" />}
                      label="아이디 저장"
+                     checked={rememberId}
+                     onChange={() => setRememberId((prev) => !prev)}
+                  />
+                  <FormControlLabel
+                     control={<Checkbox value={rememberMe} color="primary" />}
+                     label="자동로그인"
+                     onChange={() => setRememberMe((prev) => !prev)}
                   />
                   <Button
                      type="submit"

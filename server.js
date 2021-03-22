@@ -23,8 +23,10 @@ connection.connect();
 
 /*session connect*/
 
-const session = require("express-session");
-const FileStore = require("session-file-store")(session);
+var cookieParser = require("cookie-parser");
+app.use(cookieParser());
+var session = require("express-session");
+var FileStore = require("session-file-store")(session);
 app.use(
    session({
       secret: "asadlfkj!@#!@#dfgasdg",
@@ -34,13 +36,11 @@ app.use(
       httpOnly: true,
    })
 );
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
 app.get("/", (req, res) => res.send("hello world!"));
 
-const userRouter = require("./routes/users");
+var userRouter = require("./routes/users");
 app.use("/users", userRouter);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

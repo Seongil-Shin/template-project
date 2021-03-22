@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const Logout = async () => {
-   console.log("yes im on");
    await axios
       .post("/users/api/logout")
       .then((res) => {
