@@ -109,20 +109,14 @@ function SignIn({ history, onLogined }) {
                   setIdErrMsg("존재하지 않은 아이디입니다.");
                   setPwErrMsg("");
                } else if (res.data.authenticated) {
-                  onLogined();
+                  onLogined(res.data.username);
                   if (rememberId) {
                      setCookies("uid", id, { maxAge: 123154131 });
                   } else {
                      removeCookies("uid");
                   }
-                  if (
-                     history.location.state.prev &&
-                     history.location.state.prev !== "/join"
-                  ) {
-                     history.goBack();
-                  } else {
-                     history.push("/");
-                  }
+
+                  history.push("/");
                } else if (res.data.pwNotMatch) {
                   setPwErrMsg("비밀번호가 일치하지 않습니다.");
                   setIdErrMsg("");
@@ -224,7 +218,7 @@ function SignIn({ history, onLogined }) {
 
 function mapDispatchToProps(dispatch) {
    return {
-      onLogined: () => dispatch(logined()),
+      onLogined: (username) => dispatch(logined(username)),
    };
 }
 

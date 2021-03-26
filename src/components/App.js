@@ -13,23 +13,25 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { logined } from "../stores/loginState";
 
-function App({ onLogined }) {
+function App({ onLogined, isLogined }) {
    useEffect(() => {
-      const rememberMe = async () => {
-         console.log(123312);
-         await axios
-            .get("/users/api/remember-me")
-            .then((res) => {
-               if (res.data.authenticated) {
-                  onLogined();
-               }
-            })
-            .catch((err) => {
-               console.log(err);
-            });
-      };
-      rememberMe();
-   }, [onLogined]);
+      if (!isLogined) {
+         const rememberMe = async () => {
+            await axios
+               .get("/users/api/remember-me")
+               .then((res) => {
+                  if (res.data.authenticated) {
+                     onLogined();
+                  }
+               })
+               .catch((err) => {
+                  console.log(err);
+               });
+         };
+         rememberMe();
+      }
+   }, [onLogined, isLogined]);
+
    return (
       <>
          <Router>
@@ -48,10 +50,13 @@ function App({ onLogined }) {
    );
 }
 
+function mapStateToProps(state) {
+   return { isLogined: state.loginReducer.isLogined };
+}
 function mapDispatchToProps(dispatch) {
    return {
       onLogined: () => dispatch(logined()),
    };
 }
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

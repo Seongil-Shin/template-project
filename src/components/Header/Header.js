@@ -4,7 +4,7 @@ import { logout } from "../../stores/loginState";
 import Logout from "../functions/Logout";
 import HeaderComponent from "./HeaderComponent";
 
-function Header({ isLogined, onLogout }) {
+function Header({ isLogined, onLogout, username }) {
    const [links, setLinks] = useState([
       {
          to: "/",
@@ -80,19 +80,22 @@ function Header({ isLogined, onLogout }) {
       };
 
       if (isLogined) {
-         changeLastTwo("/user", "", "님", "로그아웃");
+         changeLastTwo("/user", "", `${username} 님`, "로그아웃");
       } else {
          changeLastTwo("/login", "/join", "login", "Join");
       }
       document.addEventListener("logout", onLogout);
       return () => document.removeEventListener("logout", onLogout);
-   }, [isLogined, onLogout]);
+   }, [isLogined, onLogout, username]);
 
    return <HeaderComponent id="Header" link={links} content={contents} />;
 }
 
 function mapStateToProps(state) {
-   return { isLogined: state.loginReducer.isLogined };
+   return {
+      isLogined: state.loginReducer.isLogined,
+      username: state.loginReducer.username,
+   };
 }
 function mapDispatchToProps(dispatch) {
    return {

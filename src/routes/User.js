@@ -1,22 +1,21 @@
-import axios from "axios";
 import React, { useEffect } from "react";
+import { connect } from "react-redux";
 
-function User({ history }) {
+function User({ history, isLogined }) {
    useEffect(() => {
-      const isAuthenticated = async () => {
-         await axios
-            .get("/users/api/user")
-            .then((req) => {
-               if (!req.data.authenticated) {
-                  history.push("/login");
-               }
-            })
-            .catch((err) => {
-               history.push("/");
-            });
-      };
-      isAuthenticated();
-   }, [history]);
+      if (!isLogined) {
+         try {
+            history.push("/login");
+         } catch {
+            history.push("/");
+         }
+      }
+   }, [history, isLogined]);
    return <div></div>;
 }
-export default User;
+
+function mapStateToProps(state) {
+   return { isLogined: state.loginReducer.isLogined };
+}
+
+export default connect(mapStateToProps)(User);
