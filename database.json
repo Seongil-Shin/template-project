@@ -1,0 +1,11 @@
+{
+   "host": "34.64.174.213",
+
+   "user": "root",
+
+   "password": "seoultech1710",
+
+   "port": "3306",
+
+   "database": "template"
+}

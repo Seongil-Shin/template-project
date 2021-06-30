@@ -216,11 +216,10 @@ export default function HeaderComponent({
                borderBottom: true,
             };
          }
-
          const component = (
             <LinkButton
                key={index}
-               {...path}
+               path={path}
                {...contents[index]}
                buttonStyle={style}
                name={className}
